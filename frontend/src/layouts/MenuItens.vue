@@ -4,19 +4,20 @@
       {{ title }}
     </span>
 
-    <div>
-      <div
+    <q-list>
+      <q-item
+        clickable
         v-for="(item, index) in itens"
         :key="index"
-        class="row items-center item q-gutter-x-md q-px-md q-py-md bg-grey-12 text-grey-9"
+        class="row items-center item q-px-md q-py-md bg-grey-12 text-grey-9"
         @click="navigate(item.href)"
       >
         <q-icon size="32px" :name="item.icon" />
-        <span class="text-h6">
+        <span class="text-h6 q-pl-md">
           {{ item.description }}
         </span>
-      </div>
-    </div>
+      </q-item>
+    </q-list>
   </div>
 </template>
 

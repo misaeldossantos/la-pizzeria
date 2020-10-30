@@ -4,7 +4,11 @@
     <q-page-container>
       <router-view />
       <div class="overflow-hidden">
-          <img class="marca-dagua" src="../assets/logotipo.png" />
+        <img
+          class="marca-dagua"
+          src="../assets/logotipo.png"
+          :draggable="false"
+        />
       </div>
     </q-page-container>
   </q-layout>
@@ -29,5 +33,6 @@ export default class MainLayout extends Vue {}
   bottom: -15%;
   right: -4%;
   transform: rotate(25deg);
+  user-select: none;
 }
 </style>

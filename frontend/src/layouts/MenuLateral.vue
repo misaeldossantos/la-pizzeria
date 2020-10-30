@@ -1,6 +1,6 @@
 <template>
-  <q-drawer :value="true" bordered content-class="bg-grey-1">
-    <div style="height: 93%" class="column no-wrap q-gutter-y-sm overflow-auto">
+  <q-drawer :value="true" bordered content-class="bg-grey-1 ">
+    <div style="height: 93%" class="column no-wrap q-gutter-y-sm overflow-auto overflow-hidden-x">
       <div class="q-pt-md row items-center justify-center">
         <q-img src="../assets/logotipo.png" height="183px" width="185px" />
       </div>
@@ -41,12 +41,12 @@ export default class MenuLateral extends Vue {
       title: "Dados do sistema",
       itens: [
         {
-          description: "Usuário",
+          description: "Usuários",
           icon: "las la-user",
           href: "/usuarios"
         },
         {
-          description: "Mesa",
+          description: "Mesas",
           icon: "las la-chair",
         },
         {
