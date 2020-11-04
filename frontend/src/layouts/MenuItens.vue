@@ -34,7 +34,7 @@ export default class MenuItens extends Vue {
   @Prop({ default: [], type: Array })
   itens: { description: string, icon: string, href: string }[];
 
-  navigate(href) {
+  navigate(href: string) {
     this.$router.push(href)
   }
 

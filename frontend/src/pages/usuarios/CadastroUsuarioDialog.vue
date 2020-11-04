@@ -49,6 +49,7 @@
                   v-model="usuario.nivelAcesso"
                   label="Nível de acesso"
                   clearable
+                  emit-value
                 />
               </div>
             </div>
@@ -61,7 +62,7 @@
       </q-card-section>
       <q-card-actions align="right" class="bg-grey-11 q-pa-md">
         <q-btn flat label="Cancelar" color="dark" v-close-popup />
-        <q-btn icon="save" label="Salvar" color="primary" v-close-popup />
+        <q-btn icon="save" label="Salvar" color="primary" @click="salvar" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -70,6 +71,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { nivelAcessoOptions, Usuario } from "../../core/model/Usuario";
+import UsuarioService from '../../core/services/UsuarioService'
 
 @Component({
   components: {},
@@ -83,6 +85,12 @@ export default class CadastroUsuarioDialog extends Vue {
 
   show() {
     this.dialogOpened = true;
+  }
+
+  async salvar() {
+    await UsuarioService.save(this.usuario)
+    this.usuario = new Usuario()
+    this.dialogOpened = false
   }
 }
 </script>
