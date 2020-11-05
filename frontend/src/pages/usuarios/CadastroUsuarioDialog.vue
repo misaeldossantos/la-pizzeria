@@ -9,7 +9,7 @@
       <q-card-section
         class="row bg-grey-9 text-white justify-between items-center"
       >
-        <div class="text-h6">Cadastrar usuário</div>
+        <div class="text-h6">{{ !isNew ? "Editar" : "Cadastrar" }} usuário</div>
         <q-btn round flat icon="close" v-close-popup></q-btn>
       </q-card-section>
 
@@ -62,8 +62,17 @@
       </q-card-section>
       <q-card-actions align="right" class="bg-grey-11 q-pa-md">
         <q-btn flat label="Cancelar" color="dark" v-close-popup />
-        <q-btn icon="save" label="Salvar" color="primary" @click="salvar" />
+        <q-btn
+          label="Excluir"
+          flat
+          color="negative"
+          v-close-popup
+          @click="excluir"
+          v-if="!isNew"
+        />
+        <q-btn label="Salvar" color="positive" @click="salvar" />
       </q-card-actions>
+
     </q-card>
   </q-dialog>
 </template>
@@ -71,26 +80,54 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { nivelAcessoOptions, Usuario } from "../../core/model/Usuario";
-import UsuarioService from '../../core/services/UsuarioService'
+import UsuarioService from "../../core/services/UsuarioService";
+import { confirmExclusao } from "../../core/utils/AlertUtils";
 
 @Component({
   components: {},
 })
 export default class CadastroUsuarioDialog extends Vue {
-  dialogOpened: boolean = true;
+  dialogOpened: boolean = false;
 
   usuario = new Usuario();
 
   niveisOptions = nivelAcessoOptions;
 
-  show() {
+  show(id: number) {
+    this.usuario = new Usuario();
     this.dialogOpened = true;
+    if (id) {
+      this.load(id);
+    }
+  }
+
+  async load(id) {
+    this.$q.loading.show();
+    this.usuario = await UsuarioService.get(id);
+    this.$q.loading.hide();
   }
 
   async salvar() {
-    await UsuarioService.save(this.usuario)
-    this.usuario = new Usuario()
-    this.dialogOpened = false
+    this.$q.loading.show();
+    const usuario = await UsuarioService.save(this.usuario);
+    this.$q.loading.hide();
+    this.dialogOpened = false;
+    this.$emit("onSave", usuario);
+  }
+
+  async excluir() {
+    this.$q.loading.show();
+    const confirmado = await confirmExclusao();
+    if (confirmado) {
+      await UsuarioService.delete(this.usuario.id);
+      this.dialogOpened = false;
+      this.$emit("onDelete");
+    }
+    this.$q.loading.hide();
+  }
+
+  get isNew() {
+    return !this.usuario?.id;
   }
 }
 </script>

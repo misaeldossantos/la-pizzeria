@@ -5,6 +5,12 @@ export enum NivelAcessoEnum {
   ADMINISTRADOR = "ADMINISTRADOR"
 }
 
+export const nivelAcessoLabels = {
+  [NivelAcessoEnum.GARCOM]: "Garçom",
+  [NivelAcessoEnum.COZINHEIRO]: "Cozinheiro",
+  [NivelAcessoEnum.ADMINISTRADOR]: "Administrador"
+}
+
 export const nivelAcessoOptions = [{
   label: "Garçom",
   value: NivelAcessoEnum.GARCOM

@@ -1,7 +1,7 @@
   <template>
   <q-layout view="lHh Lpr lFf">
     <menu-lateral />
-    <q-page-container>
+    <q-page-container class="container">
       <router-view />
       <div class="overflow-hidden">
         <img
@@ -34,5 +34,15 @@ export default class MainLayout extends Vue {}
   right: -4%;
   transform: rotate(25deg);
   user-select: none;
+}
+
+.container {
+  background-color #faf9f9
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+  overflow auto
 }
 </style>
