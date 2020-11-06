@@ -31,7 +31,10 @@ export const rootDir = __dirname;
   typeorm: typeormConfig,
   exclude: [
     "**/*.spec.ts"
-  ]
+  ],
+  logger: {
+    level: "off"
+  }
 })
 export class Server {
   @Inject()
@@ -46,9 +49,10 @@ export class Server {
       .use(cookieParser())
       .use(compress({}))
       .use(methodOverride())
-      .use(bodyParser.json())
+      .use(bodyParser.json({ limit: '10mb' }))
       .use(bodyParser.urlencoded({
-        extended: true
+        extended: true,
+        limit: '10mb', 
       }));
   }
 }

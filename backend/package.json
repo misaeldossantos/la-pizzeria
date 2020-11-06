@@ -17,6 +17,7 @@
     "@tsed/di": "6.2.0",
     "@tsed/exceptions": "6.2.0",
     "@tsed/json-mapper": "6.2.0",
+    "@tsed/multipartfiles": "^5.65.9",
     "@tsed/platform-express": "6.2.0",
     "@tsed/schema": "6.2.0",
     "@tsed/socketio": "6.2.0",

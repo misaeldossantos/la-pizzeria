@@ -5,16 +5,17 @@
       <div class="row items-center q-gutter-x-md justify-between">
         <div class="row q-gutter-x-md">
           <q-input
-            v-model="inputValue"
+            v-model="q"
             outlined
             :size="40"
             placeholder="Pesquise aqui..."
+            @keyup.enter="load"
           >
             <template v-slot:prepend>
               <q-icon name="search" />
             </template>
           </q-input>
-          <q-btn color="primary" icon="search" size="18px"></q-btn>
+          <q-btn color="primary" icon="search" size="18px" @click="load"></q-btn>
         </div>
         <q-btn
           round

@@ -55,7 +55,15 @@
             </div>
             <div class="q-gutter-y-sm col-5">
               <span class="text-subtitle2"> Imagem do perfil </span>
-              <q-uploader flat bordered color="grey-11" text-color="black" />
+              <q-uploader
+                flat
+                bordered
+                color="grey-11"
+                text-color="black"
+                ref="fotoUploader"
+                @added="(files) => (foto = files[0])"
+                @removed="foto = null"
+              />
             </div>
           </div>
         </div>
@@ -72,7 +80,6 @@
         />
         <q-btn label="Salvar" color="positive" @click="salvar" />
       </q-card-actions>
-
     </q-card>
   </q-dialog>
 </template>
@@ -80,6 +87,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { nivelAcessoOptions, Usuario } from "../../core/model/Usuario";
+import ArquivoService from "../../core/services/ArquivoService";
 import UsuarioService from "../../core/services/UsuarioService";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
 
@@ -89,12 +97,14 @@ import { confirmExclusao } from "../../core/utils/AlertUtils";
 export default class CadastroUsuarioDialog extends Vue {
   dialogOpened: boolean = false;
 
+  foto: File = null;
+
   usuario = new Usuario();
 
   niveisOptions = nivelAcessoOptions;
 
   show(id: number) {
-    this.usuario = new Usuario();
+    this.reset()
     this.dialogOpened = true;
     if (id) {
       this.load(id);
@@ -108,11 +118,25 @@ export default class CadastroUsuarioDialog extends Vue {
   }
 
   async salvar() {
-    this.$q.loading.show();
-    const usuario = await UsuarioService.save(this.usuario);
-    this.$q.loading.hide();
-    this.dialogOpened = false;
-    this.$emit("onSave", usuario);
+    try {
+      await this.salvarFoto();
+      this.$q.loading.show();
+      const usuario = await UsuarioService.save(this.usuario);
+      this.dialogOpened = false;
+      this.$emit("onSave", usuario);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.$q.loading.hide();
+    }
+  }
+
+  async salvarFoto() {
+    if (this.foto) {
+      this.usuario.foto = await ArquivoService.upload(this.foto);
+    } else {
+      this.usuario.foto = null;
+    }
   }
 
   async excluir() {
@@ -124,6 +148,11 @@ export default class CadastroUsuarioDialog extends Vue {
       this.$emit("onDelete");
     }
     this.$q.loading.hide();
+  }
+
+  reset() {
+    this.usuario = new Usuario()
+    this.foto = null
   }
 
   get isNew() {

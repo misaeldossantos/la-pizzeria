@@ -28,4 +28,5 @@ export class Usuario {
   email: string = ""
   senha: string = ""
   nivelAcesso: NivelAcessoEnum
+  foto: any
 }

@@ -1,8 +1,8 @@
-import { Arquivo } from './../../core/model/arquivo.entity';
+import { Arquivo } from '../../arquivos/model/arquivo.entity';
 import { Column, Entity, ManyToOne } from "typeorm";
 import { Bean } from '../../core/model/bean.entity';
 import { NivelAcessoEnum } from "./nivel-acesso-enum";
-import { Email, Enum, Ignore, Property } from '@tsed/schema';
+import { Allow, Email, Enum, Ignore, Property } from '@tsed/schema';
 
 @Entity("usuarios")
 export class Usuario extends Bean {
@@ -25,8 +25,9 @@ export class Usuario extends Bean {
      @Column()
      senha: string;
 
+     @Allow(null)
      @Property()
-     @ManyToOne(() => Arquivo)
-     foto: Arquivo;
+     @ManyToOne(() => Arquivo, { onDelete: "CASCADE", cascade: true })
+     foto?: Arquivo;
      
 }

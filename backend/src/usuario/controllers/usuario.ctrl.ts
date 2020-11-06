@@ -16,14 +16,24 @@ import { Usuario } from "../model/usuario.entity";
 export class UsuarioCtrl {
   @Post()
   async save(@BodyParams() usuario: Usuario) {
+    let usuarioAnterior = null;
+
     if (usuario.isNew) {
       const usuarioExistente = await Usuario.findOne({ email: usuario.email });
       if (usuarioExistente) {
         throw new BadRequest("Usuário já está cadastrado!");
       }
+    } else {
+      usuarioAnterior = await Usuario.findOne({ id: usuario.id });
+    }
+    if (
+      usuarioAnterior?.foto &&
+      usuarioAnterior?.foto.id != usuario.foto?.id
+    ) {
+      console.log("entrou")
+      await usuarioAnterior.foto.remove();
     }
 
-    usuario = await usuario.save();
     return usuario;
   }
 
@@ -56,14 +66,14 @@ export class UsuarioCtrl {
 
   @Delete("/:id")
   async delete(@PathParams("id") id: number) {
-    const usuario = await Usuario.findOne({id})
-    if(!usuario) {
-      throw new NotFound("Usuário não existe!")
+    const usuario = await Usuario.findOne({ id });
+    if (!usuario) {
+      throw new NotFound("Usuário não existe!");
     }
 
-    await usuario.remove()
+    await usuario.remove();
     return {
-      message: "Excluído com sucesso!"
-    }
+      message: "Excluído com sucesso!",
+    };
   }
 }
