@@ -48,6 +48,7 @@ export default class MenuLateral extends Vue {
         {
           description: "Mesas",
           icon: "las la-chair",
+          href: "/mesas"
         },
         {
           description: "Produtos",

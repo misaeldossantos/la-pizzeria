@@ -33,7 +33,6 @@ export const rootDir = __dirname;
     "**/*.spec.ts"
   ],
   logger: {
-    level: "off"
   }
 })
 export class Server {

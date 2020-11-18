@@ -2,7 +2,7 @@
   "name": "la-pizzeria",
   "version": "0.0.1",
   "description": "Sistema de comandas para pizzaria",
-  "productName": "Quasar App",
+  "productName": "La pizzeria",
   "author": "Misael dos Santos <misaelbdossantos10@gmail.com>",
   "private": true,
   "scripts": {

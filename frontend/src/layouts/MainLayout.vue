@@ -34,6 +34,7 @@ export default class MainLayout extends Vue {}
   right: -4%;
   transform: rotate(25deg);
   user-select: none;
+  pointer-events none
 }
 
 .container {

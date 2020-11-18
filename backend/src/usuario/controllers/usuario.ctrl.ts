@@ -34,7 +34,12 @@ export class UsuarioCtrl {
       await usuarioAnterior.foto.remove();
     }
 
-    return usuario;
+    return usuario.save();
+  }
+
+  @Get("/fotoperfil")
+  async getFotoPerfil() {
+    
   }
 
   @Get("/:id")
@@ -73,7 +78,7 @@ export class UsuarioCtrl {
 
     await usuario.remove();
     return {
-      message: "Excluído com sucesso!",
+      message: "Registro excluído com sucesso!",
     };
   }
 }
