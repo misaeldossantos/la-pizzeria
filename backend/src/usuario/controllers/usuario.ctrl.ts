@@ -26,12 +26,12 @@ export class UsuarioCtrl {
     } else {
       usuarioAnterior = await Usuario.findOne({ id: usuario.id });
     }
+    const foto = await usuarioAnterior?.foto
     if (
-      usuarioAnterior?.foto &&
-      usuarioAnterior?.foto.id != usuario.foto?.id
+      foto && foto?.id != usuario.foto?.id
     ) {
-      console.log("entrou")
-      await usuarioAnterior.foto.remove();
+      console.log("removendo foto...")
+      await foto.remove();
     }
 
     return usuario.save();

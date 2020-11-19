@@ -6,10 +6,10 @@ export default {
     const {data} = await httpRequest.post("/api/mesas", mesa)
     return data
   },
-  async list({ q, rpp, page }) {
+  async list({ disponivel, q, rpp, page }) {
     const {data} = await httpRequest.get("/api/mesas", {
       params: {
-        q, rpp, page
+        q, rpp, page, disponivel
       }
     })
     return data
@@ -19,6 +19,10 @@ export default {
   },
   async get(id) {
     const {data} = await httpRequest.get(`/api/mesas/${id}`)
+    return data
+  },
+  async gerarIntervalo(intervalo) {
+    const {data} = await httpRequest.post(`/api/mesas/intervalo`, intervalo)
     return data
   }
 }

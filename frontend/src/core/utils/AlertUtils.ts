@@ -1,10 +1,14 @@
 import { Dialog } from "quasar";
 
 export async function confirmExclusao() {
+  return showConfirm("Deseja realmente excluir?")
+}
+
+export async function showConfirm(message) {
   return new Promise((resolve, reject) =>
     Dialog.create({
       title: "Atenção!",
-      message: "Deseja realmente excluir?",
+      message,
       cancel: true,
       persistent: true
     })

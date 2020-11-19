@@ -3,18 +3,17 @@
     class="add-card column"
     :class="{ disponivel: mesa.disponivel, indisponivel: !mesa.disponivel }"
   >
-    <q-card-section class="justify-between row q-gutter-x-sm items-center">
-      <div v-if="mesa.id">
-        <q-btn
-          @click="remover()"
-          round
-          icon="las la-trash-alt"
-          color="negative"
-          size="10pt"
-          flat
-          :disable="loading"
-        />
-      </div>
+    <q-card-section class="row q-gutter-x-sm items-center" :class="{'justify-end': !mesa.id, 'justify-between': mesa.id}">
+      <q-btn
+        @click="remover()"
+        round
+        icon="las la-trash-alt"
+        color="white"
+        size="10pt"
+        flat
+        :disable="loading"
+        v-if="mesa.id"
+      />
       <q-btn
         @click="modoEdicao = !modoEdicao"
         round
@@ -33,10 +32,11 @@
         <q-input
           v-if="modoEdicao"
           @keypress="keyPress"
-          v-model="mesa.numero"
+          v-model.number="mesa.numero"
           borderless
           class="numero"
           color="white"
+          autofocus
           ref="numeroInput"
         />
         <span v-else class="numero text-white">
@@ -74,6 +74,7 @@
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { Mesa } from "../../core/model/Mesa";
 import MesaService from "../../core/services/MesaService";
+import { confirmExclusao } from "../../core/utils/AlertUtils";
 
 @Component({
   components: {},
@@ -92,8 +93,13 @@ export default class MesaCard extends Vue {
   @Watch("mesa.numero")
   onNumeroChange(numero) {
     if (numero == "") {
-      this.mesa.numero = 0;
+      // this.mesa.numero = 0;
     }
+  }
+
+  @Watch("modoEdicao")
+  onModoEdicaoChange(value) {
+    this.$emit("modoEdicaoChange", value)
   }
 
   async salvar() {
@@ -104,9 +110,16 @@ export default class MesaCard extends Vue {
       this.modoEdicao = false;
     } catch (e) {
       this.modoEdicao = true;
-      this.numeroFocus();
     } finally {
       this.loading = false;
+    }
+  }
+
+  async remover() {
+    const confirm = await confirmExclusao();
+    if (confirm) {
+      await MesaService.delete(this.mesa.id);
+      this.$emit("onDelete", this.mesa);
     }
   }
 
@@ -118,20 +131,9 @@ export default class MesaCard extends Vue {
     if (isNaN(String.fromCharCode(ev.which) as any)) ev.preventDefault();
   }
 
-  @Watch("modoEdicao")
-  numeroFocus() {
-    if (this.modoEdicao) {
-      setTimeout(() => {
-        (this.$refs.numeroInput as any).focus();
-      }, 200);
-    }
-  }
-
   ativarModoEdicao() {
     this.modoEdicao = true;
   }
-
-  excluir() {}
 
   editar() {}
 

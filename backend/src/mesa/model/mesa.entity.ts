@@ -7,7 +7,7 @@ export class Mesa extends Bean {
 
      @Property()
      @Column({ unique: true })
-     numero: string;
+     numero: number;
 
      @Property()
      @Column()

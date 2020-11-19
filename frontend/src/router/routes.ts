@@ -11,6 +11,11 @@ const routes: RouteConfig[] = [
     ]
   },
 
+  {
+    path: '/login',
+    component: () => import("pages/login/Index.vue")
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

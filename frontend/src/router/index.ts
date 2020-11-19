@@ -1,13 +1,13 @@
-import { route } from 'quasar/wrappers';
-import VueRouter from 'vue-router';
-import routes from './routes';
+import { route } from "quasar/wrappers";
+import VueRouter from "vue-router";
+import routes from "./routes";
 
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation
  */
 
-export default route(function ({ Vue }) {
+export default route(function({ Vue }) {
   Vue.use(VueRouter);
 
   const Router = new VueRouter({
@@ -21,5 +21,16 @@ export default route(function ({ Vue }) {
     base: process.env.VUE_ROUTER_BASE
   });
 
+  Router.beforeEach((to, from, next) => {
+    let registered = window.localStorage["token"];
+
+    if (!registered && to.fullPath !== "/login") {
+      next("/login");
+      return;
+    }
+
+    next();
+  });
+
   return Router;
-})
+});

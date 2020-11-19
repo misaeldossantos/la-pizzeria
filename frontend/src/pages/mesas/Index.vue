@@ -14,20 +14,68 @@
             <template v-slot:prepend>
               <q-icon name="search" />
             </template>
+
           </q-input>
+          <q-btn color="primary" icon="search" size="18px" @click="load"></q-btn>
+          <div class="q-gutter-sm">
+            <q-radio v-model="disponivel" :val="null" label="Todas as mesas" />
+            <q-radio v-model="disponivel" :val="true" label="Apenas disponíveis" />
+            <q-radio v-model="disponivel" :val="false" label="Apenas indisponíveis" />
+          </div>
         </div>
       </div>
 
       <q-separator inset />
 
-      <div
-        v-if="!mesas.length"
-        class="column q-gutter-y-md items-center justify-center q-pa-md"
-      >
-        <q-icon name="las la-frown" size="40pt" color="grey-8" />
-        <span class="text-grey-8 text-center text-h6">
-          Nenhuma mesa encontrada!
-        </span>
+      <div class="q-px-md row q-gutter-x-sm items-center">
+        <q-btn
+          label="Gerar mesas em um intervalo"
+          color="primary"
+          @click="gerarNumerosModal = true"
+        />
+        <q-btn icon="las la-sync" flat @click="loadAll" />
+        <q-dialog
+          v-model="gerarNumerosModal"
+          persistent
+          transition-show="jump-down"
+          transition-hide="jump-up"
+          position="top"
+        >
+          <q-card style="width: 100%; max-width: 900px">
+            <q-card-section
+              class="row bg-grey-9 text-white justify-between items-center"
+            >
+              <div class="text-h6">Gerar mesas em um intervalo</div>
+              <q-btn round flat icon="close" v-close-popup></q-btn>
+            </q-card-section>
+
+            <q-separator />
+            <q-card-section>
+              <div class="q-pa-md row q-gutter-x-md items-center">
+                <q-input
+                  class="col-grow"
+                  v-model.number="rangeGerador.min"
+                  label="De"
+                  type="number"
+                />
+                <q-input
+                  class="col-grow"
+                  v-model.number="rangeGerador.max"
+                  label="Até"
+                  type="number"
+                />
+                <div>
+                  <q-btn
+                    color="positive"
+                    @click="gerarIntervalo"
+                    :disabled="disableGerarIntervalo"
+                    label="Gerar"
+                  />
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
       </div>
 
       <div class="row items-center q-gutter-x-md q-gutter-y-md q-pa-md">
@@ -39,6 +87,7 @@
           :mesa="mesa"
           @onSave="onNewSave"
           ref="novaMesaRef"
+          @modoEdicaoChange="onModoEdicaoNovoChange"
           :openAsModoEdicao="true"
         />
         <mesa-card
@@ -48,6 +97,7 @@
           @excluir="excluir"
           @editar="editar"
           @onSave="salvar"
+          @onDelete="loadAll"
         />
       </div>
     </div>
@@ -63,11 +113,20 @@ import MesaService from "../../core/services/MesaService";
 import MesaCard from "./MesaCard.vue";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
 import { Mesa } from "../../core/model/Mesa";
+import { Notify } from "quasar";
 
 @Component({
   components: { AppHeader, MesaCard },
 })
 export default class Mesas extends Vue {
+  gerarNumerosModal = false;
+  disponivel = null
+
+  rangeGerador = {
+    min: 0,
+    max: 0,
+  };
+
   q = "";
   page = 1;
 
@@ -87,7 +146,7 @@ export default class Mesas extends Vue {
   cadastrarNovo() {}
 
   async load() {
-    this.loadAll()
+    this.loadAll();
   }
 
   mounted() {
@@ -111,7 +170,7 @@ export default class Mesas extends Vue {
   }
 
   async salvar(mesa: Mesa) {
-      this.loadAll();
+    this.loadAll();
     console.log(mesa);
   }
 
@@ -121,16 +180,44 @@ export default class Mesas extends Vue {
         q: this.q,
         page: 1,
         rpp: 10,
+        disponivel: this.disponivel
       })
     ).list;
   }
 
   async onNewSave(mesa) {
-      this.mesa = null;
-      this.loadAll();
+    this.mesa = null;
+    this.loadAll();
   }
 
+  onModoEdicaoNovoChange(value) {
+    if (!value) {
+      this.mesa = null;
+    }
+  }
 
+  get disableGerarIntervalo() {
+    return (
+      !this.rangeGerador.min ||
+      !this.rangeGerador.max ||
+      this.rangeGerador.min > this.rangeGerador.max
+    );
+  }
+
+  async gerarIntervalo() {
+    await MesaService.gerarIntervalo(this.rangeGerador);
+    this.loadAll();
+    this.rangeGerador = {
+      min: 0,
+      max: 0,
+    };
+    this.gerarNumerosModal = false;
+  }
+
+  @Watch("disponivel")
+  onDisponivelChange() {
+    this.loadAll()
+  }
 }
 </script>
 
