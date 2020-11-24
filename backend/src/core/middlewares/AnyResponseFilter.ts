@@ -14,8 +14,7 @@ function bufferToStream(buffer: Buffer) {
 export class AnyResponseFilter implements ResponseFilterMethods {
   transform(data: any, ctx: Context) {
     if (data instanceof Buffer) {
-      ctx.response.contentType("application/octet-stream");
-      return ctx.response.stream(bufferToStream(data))
+      return bufferToStream(data)
     }
     return data;
   }

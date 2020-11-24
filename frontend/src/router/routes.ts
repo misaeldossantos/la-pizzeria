@@ -7,7 +7,9 @@ const routes: RouteConfig[] = [
     children: [
       { path: '', component: () => import('pages/Index.vue') },
       { path: "/usuarios", component: () => import("pages/usuarios/Index.vue") },
-      { path: "/mesas", component: () => import("pages/mesas/Index.vue") }
+      { path: "/mesas", component: () => import("pages/mesas/Index.vue") },
+      { path: "/produtos", component: () => import("pages/produtos/Index.vue") },
+      { path: "/comandas", component: () => import("pages/comandas/Index.vue") }
     ]
   },
 

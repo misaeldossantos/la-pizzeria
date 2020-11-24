@@ -1,5 +1,5 @@
 <template>
-  <q-drawer :value="true" bordered content-class="bg-grey-1 ">
+  <q-drawer :value="true" bordered content-class="bg-grey-1">
     <div
       style="height: 93%"
       class="column no-wrap q-gutter-y-sm overflow-auto overflow-hidden-x"
@@ -67,6 +67,7 @@ const menus = {
   produtos: {
     description: "Produtos",
     icon: "las la-pizza-slice",
+    href: "/produtos"
   },
   comandas: {
     description: "Comandas",

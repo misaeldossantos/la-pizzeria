@@ -22,7 +22,9 @@ module.exports = configure(function (/* ctx */) {
     boot: [
 
       'axios',
-      'usuario-filters'
+      'usuario-filters',
+      'produto-filters',
+      'general-filters',
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

@@ -46,4 +46,8 @@ export default class MenuItens extends Vue {
   border-bottom: 1px solid #D4D4D4;
   border-top: 1px solid #D4D4D4;
 }
+
+.ativo {
+  background-color: red
+}
 </style>
