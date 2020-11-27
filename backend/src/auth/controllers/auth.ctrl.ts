@@ -39,7 +39,7 @@ export class AuthCtrl {
     const usuarioId: number = await this.authService.getUsuarioId();
     const usuario: any = await Usuario.findOneOrFail({ id: usuarioId });
     delete usuario.senha;
-    usuario.fotoUrl = usuario.fotoUrl + "?authorization=" + this.threadLocal.token
+    usuario.fotoUrl = await usuario.foto? usuario.fotoUrl + "?authorization=" + this.threadLocal.token: null
     return usuario;
   }
 

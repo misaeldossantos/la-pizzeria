@@ -72,6 +72,7 @@ const menus = {
   comandas: {
     description: "Comandas",
     icon: "las la-clipboard-check",
+    href: "/comandas"
   },
   caixa: {
     description: "Caixa",

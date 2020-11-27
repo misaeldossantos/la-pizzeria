@@ -39,7 +39,7 @@
         </span>
       </div>
 
-      <usuario-card
+      <comanda-card
         v-for="usuario of usuarios"
         :key="usuario.id"
         :usuario="usuario"
@@ -62,11 +62,11 @@ import AppHeader from "../../components/AppHeader.vue";
 import { NivelAcessoEnum, Usuario } from "../../core/model/Usuario";
 import UsuarioService from "../../core/services/UsuarioService";
 import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
-import UsuarioCard from "./UsuarioCard.vue";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
+import ComandaCard from "./ComandaCard.vue";
 
 @Component({
-  components: { AppHeader, CadastroUsuarioDialog, UsuarioCard },
+  components: { AppHeader, CadastroUsuarioDialog, ComandaCard },
 })
 export default class Usuarios extends Vue {
   q = "";
@@ -77,7 +77,7 @@ export default class Usuarios extends Vue {
   inputValue: string = "";
 
   cadastrarNovo() {
-    (this.$refs.cadastroDialogRef as any).show();
+    this.$router.push("/comanda/novo")
   }
 
   async load() {

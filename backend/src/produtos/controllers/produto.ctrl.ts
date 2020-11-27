@@ -116,6 +116,6 @@ export class ProdutoCtrl {
   @Get("/:id/foto")
   async getFotoPerfil(@PathParams("id") id: number) {
     const produto: any = await Produto.findOneOrFail({ id });
-    return (await produto.foto).buffer;
+    return (await produto.foto)?.buffer;
   }
 }
