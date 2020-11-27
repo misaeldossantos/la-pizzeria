@@ -1,7 +1,9 @@
 <template>
   <q-card flat bordered>
     <div class="q-pa-md row justify-between items-center">
-      <produto-general-card />
+      <produto-general-card
+        :produto="produto"
+      />
       <div class="column items-center q-gutter-y-sm">
         <div class="row q-gutter-x-sm items-center">
           <q-btn icon="las la-chevron-circle-left" flat round size="14px" color="primary" />
@@ -16,14 +18,18 @@
   </q-card>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ProdutoGeneralCard from "../../components/produtos/ProdutoGeneralCard.vue";
+import { Produto } from "../../core/model/Produto";
 
 @Component({
   components: { ProdutoGeneralCard },
 })
-export default class ProdutoComanda extends Vue {}
+export default class ProdutoComanda extends Vue {
+  @Prop({ required: true })
+  produto: Produto;
+}
 </script>
 
 <style lang="stylus" scoped>

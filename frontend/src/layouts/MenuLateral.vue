@@ -77,6 +77,7 @@ const menus = {
   caixa: {
     description: "Caixa",
     icon: "las la-hand-holding-usd",
+    href: "/caixa"
   },
 };
 

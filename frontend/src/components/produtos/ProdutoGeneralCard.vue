@@ -4,23 +4,25 @@
       contain
       width="100px"
       height="100px"
-      src="https://www.drogariaminasbrasil.com.br/media/product/084/refrigerante-coca-cola-lata-350ml-80c.jpg"
+      :src="produto.fotoUrl"
     />
     <div class="column col-grow">
       <div class="row items-center q-gutter-x-md">
-        <span class="text-h6 text-bold"> Refrigerante </span>
+        <span class="text-h6 text-bold"> {{produto.descricao}} </span>
         <span
           class="codigo q-px-md q-py-sm bg-grey-4 text-bold text-primary rounded-borders"
-          >#9999</span
+          >
+            #{{produto.id}}
+          </span
         >
       </div>
       <span class="text-primary">
-        {{ "BEBIDA" | categoriaProduto }}
+        {{ produto.categoria | categoriaProduto }}
       </span>
       <div class="tag-preco q-mt-sm">
         <div class="row q-gutter-x-sm justify-center items-center">
           <span class="q-pl-sm text-subtitle1 text-primary">
-            {{ 1000 | money }}</span
+            {{ produto.preco | money }}</span
           >
           <q-icon name="las la-tag" size="16px" class="text-primary" />
         </div>
@@ -29,13 +31,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { Produto } from "../../core/model/Produto";
 
 @Component({
   components: {},
 })
-export default class ProdutoGeneralCard extends Vue {}
+export default class ProdutoGeneralCard extends Vue {
+  @Prop({ required: true })
+  produto: Produto;
+}
 </script>
 
 <style lang="stylus" scoped>

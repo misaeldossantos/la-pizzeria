@@ -42,7 +42,7 @@
             icon="las la-money-bill"
             round
             color="positive"
-            @click="excluir"
+            @click="pagar"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -91,6 +91,10 @@ import { Usuario } from "../../core/model/Usuario";
 export default class ComandaCard extends Vue {
   @Prop({ required: true })
   usuario: Usuario;
+
+  pagar() {
+    this.$emit("pagar", this.usuario.id);
+  }
 
   excluir() {
     this.$emit("excluir", this.usuario.id);

@@ -1,5 +1,6 @@
 <template>
-  <q-page class="row items-center justify-evenly">
+  <q-page class="row">
+    <span>Bem vindo(a) {{usuario.nome}}</span>
   </q-page>
 </template>
 

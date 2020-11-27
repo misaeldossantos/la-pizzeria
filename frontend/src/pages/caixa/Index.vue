@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-header title="Comandas" />
+    <app-header title="Caixa" />
     <div class="column q-gutter-y-md q-py-lg q-px-md">
       <div class="row items-center q-gutter-x-md justify-between">
         <div class="row q-gutter-x-md">
@@ -29,22 +29,6 @@
 
       <q-separator inset />
 
-      <div style="max-width: 400px">
-        <q-tabs
-          v-model="tab"
-          class="bg-grey-1 text-grey-8"
-          dense
-          inline-label
-          indicator-color="primary"
-          align="justify"
-          active-color="primary"
-        >
-          <q-tab name="todos" label="Todas" />
-          <q-tab icon="las la-clipboard" name="ABERTAS" label="Abertas" />
-          <q-tab icon="las la-clipboard-check" name="FINALIZADAS"  label="Finalizadas" />
-        </q-tabs>
-      </div>
-
       <div
         v-if="!usuarios.length"
         class="column q-gutter-y-md items-center justify-center q-pa-md"
@@ -55,11 +39,10 @@
         </span>
       </div>
 
-      <comanda-card
+      <usuario-card
         v-for="usuario of usuarios"
         :key="usuario.id"
         :usuario="usuario"
-        @pagar="pagar"
         @excluir="excluir"
         @editar="editar"
       />
@@ -79,24 +62,22 @@ import AppHeader from "../../components/AppHeader.vue";
 import { NivelAcessoEnum, Usuario } from "../../core/model/Usuario";
 import UsuarioService from "../../core/services/UsuarioService";
 import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
-import { confirmExclusao, showConfirm } from "../../core/utils/AlertUtils";
-import ComandaCard from "./ComandaCard.vue";
+import UsuarioCard from "./UsuarioCard.vue";
+import { confirmExclusao } from "../../core/utils/AlertUtils";
 
 @Component({
-  components: { AppHeader, CadastroUsuarioDialog, ComandaCard },
+  components: { AppHeader, CadastroUsuarioDialog, UsuarioCard },
 })
 export default class Usuarios extends Vue {
   q = "";
   page = 1;
-
-  tab = "todos"
 
   usuarios: Usuario[] = [];
 
   inputValue: string = "";
 
   cadastrarNovo() {
-    this.$router.push("/comanda/novo")
+    (this.$refs.cadastroDialogRef as any).show();
   }
 
   async load() {
@@ -114,14 +95,6 @@ export default class Usuarios extends Vue {
 
   onChange() {
     this.load();
-  }
-
-  async pagar(id) {
-    const confirmado = await showConfirm("Deseja realmente realizar o pagamento desta comanda?");
-    if (confirmado) {
-      this.$router.push('/caixa')
-      this.load();
-    }
   }
 
   async excluir(id) {
