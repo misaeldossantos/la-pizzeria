@@ -2,57 +2,28 @@
   <div>
     <app-header title="Caixa" />
     <div class="column q-gutter-y-md q-py-lg q-px-md">
-      <div class="row items-center q-gutter-x-md justify-between">
-        <div class="row q-gutter-x-md">
-          <q-input
-            v-model="q"
-            outlined
-            :size="40"
-            placeholder="Pesquise aqui..."
-            @keyup.enter="load"
-          >
-            <template v-slot:prepend>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-          <q-btn color="primary" icon="search" size="18px" @click="load"></q-btn>
-        </div>
-        <q-btn
-          round
-          flat
-          color="primary"
-          icon="las la-plus"
-          size="18px"
-          @click="cadastrarNovo()"
+      <div class="row q-gutter-x-md justify-start">
+        <q-select
+          v-model="q"
+          outlined
+          :size="40"
+          placeholder="Insira o número da mesa"
+          @keyup.enter="load"
+          bg-color="white"
+          dense
+          use-input
+          type="number"
+          class="col-2"
         />
+        <q-btn color="primary" icon="search" size="14px" @click="load"/>
       </div>
-
-      <q-separator inset />
-
-      <div
-        v-if="!usuarios.length"
-        class="column q-gutter-y-md items-center justify-center q-pa-md"
-      >
-        <q-icon name="las la-frown" size="40pt" color="grey-8" />
-        <span class="text-grey-8 text-center text-h6">
-          Nenhum usuário encontrado!
-        </span>
-      </div>
-
-      <usuario-card
-        v-for="usuario of usuarios"
-        :key="usuario.id"
-        :usuario="usuario"
-        @excluir="excluir"
-        @editar="editar"
-      />
     </div>
-
-    <cadastro-usuario-dialog
-      ref="cadastroDialogRef"
-      @onSave="onChange"
-      @onDelete="onChange"
-    />
+    <div class="row q-pa-md">
+      <div class="row col-grow q-gutter-x-md items-start">
+        <pagamento />
+        <dados-comanda />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -64,11 +35,14 @@ import UsuarioService from "../../core/services/UsuarioService";
 import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
 import UsuarioCard from "./UsuarioCard.vue";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
+import DadosComanda from "./DadosComanda.vue";
+import Pagamento from "./Pagamento.vue";
+import ResumoCard from "./ResumoCard.vue";
 
 @Component({
-  components: { AppHeader, CadastroUsuarioDialog, UsuarioCard },
+  components: { AppHeader, DadosComanda, Pagamento, ResumoCard },
 })
-export default class Usuarios extends Vue {
+export default class Caixa extends Vue {
   q = "";
   page = 1;
 

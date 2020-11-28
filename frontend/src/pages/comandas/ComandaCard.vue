@@ -39,10 +39,23 @@
         </div>
         <div class="row items-center q-gutter-x-md">
           <q-btn
+            icon="las la-bullhorn"
+            round
+            color="orange"
+          >
+          <q-tooltip
+              content-class="bg-grey-8"
+              content-style="font-size: 14px"
+              :offset="[10, 10]"
+            >
+              Notificar
+            </q-tooltip>
+          </q-btn>
+          <q-btn
             icon="las la-money-bill"
             round
             color="positive"
-            @click="pagar"
+            @click="$router.push('/caixa')"
           >
             <q-tooltip
               content-class="bg-grey-8"
