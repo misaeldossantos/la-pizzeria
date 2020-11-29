@@ -13,7 +13,7 @@
           <q-btn flat icon="las la-chevron-circle-right" round size="14px" color="primary" @click="incrementar()" />
         </div>
         <div class="row q-gutter-md">
-          <q-btn v-if="item && item.id" label="Observações" color="blue-5" @click="abrirObservacoesItem" />
+          <q-btn v-if="item && item.id && item.produto.categoria == 'COMIDA' " label="Observações" color="blue-5" @click="abrirObservacoesItem" />
           <q-btn v-if="item && item.id" label="Remover" color="red-5" @click="remover" />
           <q-btn v-else label="Adicionar" color="blue-5" @click="adicionar" :disabled="(!item || !item.quantidade)" />
         </div>
