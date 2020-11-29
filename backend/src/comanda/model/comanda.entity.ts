@@ -9,12 +9,12 @@ import { StatusComandaEnum } from "./status-comanda-enum";
 export class Comanda extends Bean {
 
      @Property()
-     @ManyToOne(() => Mesa, { onDelete: "CASCADE", cascade: true })
+     @ManyToOne(() => Mesa, { cascade: true })
      @JoinColumn({name: 'mesa_id'})
      mesa: Mesa;
 
      @Property()
-     @ManyToOne(() => Usuario, { onDelete: "CASCADE", cascade: true })
+     @ManyToOne(() => Usuario, { cascade: true })
      @JoinColumn({name: 'garcon_id'})
      garcom: Usuario;
      
