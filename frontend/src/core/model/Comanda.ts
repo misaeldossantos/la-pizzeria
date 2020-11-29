@@ -1,3 +1,5 @@
+import { Usuario } from './Usuario';
+import { Mesa } from './Mesa';
 
 export enum StatusComandaEnum {
   ABERTO = "ABERTO",
@@ -29,8 +31,9 @@ export const statusComandaOptions = [{
 
 export class Comanda {
   id?: number;
-  mesa_id: number;
-  para_viagem: boolean;
+  mesa: Mesa;
+  garcom: Usuario;
+  paraViagem: boolean = false;
   status: StatusComandaEnum;
-  valor_total: number = 0.00
+  valorTotal: number = 0.00
 }

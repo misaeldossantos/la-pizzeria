@@ -1,3 +1,4 @@
+import { NivelAcessoEnum } from './../model/nivel-acesso-enum';
 import {
   BodyParams,
   Controller,
@@ -57,15 +58,21 @@ export class UsuarioCtrl {
   async list(
     @QueryParams("page") page: number = 1,
     @QueryParams("rpp") rpp: number = 10,
-    @QueryParams("q") q: string
+    @QueryParams("q") q: string,
+    @QueryParams("nivelAcesso") nivelAcesso: NivelAcessoEnum,
   ): Promise<PaginatedList<Usuario>> {
     const like = Like(`%${q}%`);
     const paginatedList = new PaginatedList<Usuario>();
     paginatedList.page = page;
     paginatedList.rpp = rpp;
-    paginatedList.list = await Usuario.find({
-      nome: like,
-    });
+    const options: any = {}
+    if(q) {
+      options.nome = like
+    }
+    if(nivelAcesso) {
+      options.nivelAcesso = nivelAcesso
+    }
+    paginatedList.list = await Usuario.find(options);
     return paginatedList;
   }
 

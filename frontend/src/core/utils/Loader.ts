@@ -6,7 +6,7 @@ export class Loader {
 
   }
   callback;
-  constructor(callback = () => null) {
+  constructor(callback: Function = () => null) {
     this.callback = callback
   }
 

@@ -6,7 +6,6 @@ import * as compress from "compression";
 import * as cookieParser from "cookie-parser";
 import * as methodOverride from "method-override";
 import * as cors from "cors";
-import "@tsed/ajv";
 import "@tsed/swagger";
 import "@tsed/typeorm";
 import typeormConfig from "./config/typeorm";
@@ -33,7 +32,7 @@ export const rootDir = __dirname;
   logger: {},
   responseFilters: [
     AnyResponseFilter
-  ]
+  ],
 })
 export class Server {
   @Inject()

@@ -5,17 +5,20 @@
       <div class="row items-center q-gutter-x-md justify-between">
         <div class="row q-gutter-x-md">
           <q-input
-            v-model="q"
+            v-model.number="q"
             outlined
             :size="40"
-            placeholder="Pesquise aqui..."
+            placeholder="Pesquise por mesa..."
             @keyup.enter="load"
+            dense
+            bg-color="white"
+            class="col-grow"
           >
             <template v-slot:prepend>
               <q-icon name="search" />
             </template>
           </q-input>
-          <q-btn color="primary" icon="search" size="18px" @click="load"></q-btn>
+          <q-btn color="primary" icon="search" size="16px" @click="load"></q-btn>
         </div>
         <q-btn
           round
@@ -40,25 +43,25 @@
           active-color="primary"
         >
           <q-tab name="todos" label="Todas" />
-          <q-tab icon="las la-clipboard" name="ABERTAS" label="Abertas" />
-          <q-tab icon="las la-clipboard-check" name="FINALIZADAS"  label="Finalizadas" />
+          <q-tab icon="las la-clipboard" name="ABERTO" label="Abertas" />
+          <q-tab icon="las la-clipboard-check" name="FINALIZADO"  label="Finalizadas" />
         </q-tabs>
       </div>
 
       <div
-        v-if="!usuarios.length"
+        v-if="!comandas.length"
         class="column q-gutter-y-md items-center justify-center q-pa-md"
       >
         <q-icon name="las la-frown" size="40pt" color="grey-8" />
         <span class="text-grey-8 text-center text-h6">
-          Nenhum usuário encontrado!
+          Nenhuma comanda encontrado!
         </span>
       </div>
 
       <comanda-card
-        v-for="usuario of usuarios"
-        :key="usuario.id"
-        :usuario="usuario"
+        v-for="comanda of comandas"
+        :key="comanda.id"
+        :comanda="comanda"
         @pagar="pagar"
         @excluir="excluir"
         @editar="editar"
@@ -74,38 +77,44 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import AppHeader from "../../components/AppHeader.vue";
 import { NivelAcessoEnum, Usuario } from "../../core/model/Usuario";
-import UsuarioService from "../../core/services/UsuarioService";
 import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
 import { confirmExclusao, showConfirm } from "../../core/utils/AlertUtils";
 import ComandaCard from "./ComandaCard.vue";
+import ComandaService from "../../core/services/ComandaService";
 
 @Component({
   components: { AppHeader, CadastroUsuarioDialog, ComandaCard },
 })
-export default class Usuarios extends Vue {
+export default class Comandas extends Vue {
   q = "";
   page = 1;
 
   tab = "todos"
 
-  usuarios: Usuario[] = [];
+  comandas: Usuario[] = [];
 
   inputValue: string = "";
 
   cadastrarNovo() {
-    this.$router.push("/comanda/novo")
+    this.$router.push("/comandas/novo")
+  }
+
+  @Watch("tab")
+  onTabChange() {
+    this.load()
   }
 
   async load() {
-    const { list } = await UsuarioService.list({
+    const { list } = await ComandaService.list({
       rpp: 10,
       page: this.page,
       q: this.q,
+      status: this.tab !== "todos"? this.tab: null
     });
-    this.usuarios = list;
+    this.comandas = list;
   }
 
   mounted() {
@@ -127,7 +136,7 @@ export default class Usuarios extends Vue {
   async excluir(id) {
     const confirmado = await confirmExclusao();
     if (confirmado) {
-      await UsuarioService.delete(id);
+      await ComandaService.delete(id);
       this.load();
     }
   }

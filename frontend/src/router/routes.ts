@@ -10,7 +10,7 @@ const routes: RouteConfig[] = [
       { path: "/mesas", component: () => import("pages/mesas/Index.vue") },
       { path: "/produtos", component: () => import("pages/produtos/Index.vue") },
       { path: "/comandas", component: () => import("pages/comandas/Index.vue") },
-      { path: "/comanda/:id", component: () => import("pages/comandas/ComandaPage.vue") },
+      { path: "/comandas/:id", component: () => import("pages/comandas/ComandaPage.vue") },
       { path: "/caixa", component: () => import("pages/caixa/Index.vue") },
     ]
   },

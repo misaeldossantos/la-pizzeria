@@ -1,22 +1,20 @@
-import { Usuario } from './../../usuario/model/usuario.entity';
-import { Mesa } from './../../mesa/model/mesa.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Enum, Property } from '@tsed/schema';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Bean } from '../../core/model/bean.entity';
+import { Mesa } from './../../mesa/model/mesa.entity';
+import { Usuario } from './../../usuario/model/usuario.entity';
+import { ComandaItem } from './comanda-item.entity';
 import { StatusComandaEnum } from "./status-comanda-enum";
-import { Allow, Email, Enum, Ignore, Property } from '@tsed/schema';
-
-const config = require("../../config/config.json")
-
 @Entity("comandas")
 export class Comanda extends Bean {
 
      @Property()
-     @ManyToOne(() => Mesa, { lazy: true, onDelete: "CASCADE", cascade: true })
+     @ManyToOne(() => Mesa, { onDelete: "CASCADE", cascade: true })
      @JoinColumn({name: 'mesa_id'})
      mesa: Mesa;
 
      @Property()
-     @ManyToOne(() => Usuario, { lazy: true, onDelete: "CASCADE", cascade: true })
+     @ManyToOne(() => Usuario, { onDelete: "CASCADE", cascade: true })
      @JoinColumn({name: 'garcon_id'})
      garcom: Usuario;
      
@@ -32,5 +30,9 @@ export class Comanda extends Bean {
      @Property()
      @Column({ name: "valor_total" })
      valorTotal: number;
+
+     @Property()
+     @OneToMany(() => ComandaItem, item => item.comanda, {lazy: true, onDelete: 'CASCADE', cascade: true})
+     itens: ComandaItem[];
 
 }

@@ -11,7 +11,6 @@
     "typeorm": "tsed typeorm"
   },
   "dependencies": {
-    "@tsed/ajv": "6.2.0",
     "@tsed/common": "^6.2.0",
     "@tsed/core": "6.2.0",
     "@tsed/di": "6.2.0",
@@ -23,7 +22,6 @@
     "@tsed/socketio": "6.2.0",
     "@tsed/swagger": "6.2.0",
     "@tsed/typeorm": "6.2.0",
-    "ajv": "6.12.6",
     "async-local-storage": "^2.3.1",
     "body-parser": "1.19.0",
     "compression": "1.7.4",

@@ -4,7 +4,7 @@
       contain
       width="100px"
       height="100px"
-      :src="produto.fotoUrl"
+      :src="`/api/produtos/${produto.id}/foto` | fileUrl"
     />
     <div class="column col-grow">
       <div class="row items-center q-gutter-x-md">

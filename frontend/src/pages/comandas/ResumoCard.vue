@@ -5,19 +5,26 @@
         <div>
           <span class="text-h6">Resumo</span>
         </div>
-        <li>
-          <span class="title">Foo</span>
-          <span class="chapter">Chapter 1</span>
-        </li>
-        <li>
-          <span class="title">Bar</span>
-          <span class="chapter">Chapter 2</span>
+        <div v-if="!itens.length" class="column items-center justify-center q-pa-md">
+          Nenhum item adicionado!
+        </div>
+        <li v-for="item of itens" :key="item.id">
+          <span class="title">{{ item.produto.descricao }}</span>
+          <span class="chapter">{{
+            (item.produto.preco * item.quantidade) | money
+          }}</span>
         </li>
       </div>
       <q-separator />
       <div class="row q-pa-md q-gutter-md items-center justify-end">
         <span class="text-h6 text-bold">Total:</span>
-        <span class="text-h6 text-bold text-primary">{{ 120 | money }}</span>
+        <span class="text-h6 text-bold text-primary">{{ (total || 0) | money }}</span>
+      </div>
+      <div class="row q-pa-md justify-end">
+        <q-btn
+          label="Pagar comanda"
+          color="green"
+        />
       </div>
     </div>
   </q-card>
@@ -29,7 +36,16 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 @Component({
   components: {},
 })
-export default class DadosIniciaisCard extends Vue {}
+export default class ResumoCard extends Vue {
+  @Prop({ required: true })
+  itens: any[];
+
+  get total() {
+    return this.itens
+      .map((item) => (item.produto.preco * item.quantidade))
+      .reduce((a, b) => a + b, 0);
+  }
+}
 </script>
 
 <style scoped>

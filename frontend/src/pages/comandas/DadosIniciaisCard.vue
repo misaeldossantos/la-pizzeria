@@ -1,39 +1,77 @@
 <template>
   <q-card class="q-pa-md col-grow" bordered flat>
-    <div class="column q-gutter-y-sm">
+    <div class="column q-gutter-y-md">
       <span class="text-h6">Dados iniciais</span>
       <q-select
-        option-value="value"
-        option-label="label"
-        :options="[{ label: 'Mesa 1', value: 1 }]"
-        label="Selecionar mesa"
+        option-label="numero"
+        :options="mesaAutoComplete.options"
+        label="Digite e selecione a mesa"
         clearable
         outlined
+        use-input
         dense
+        :disabled="comanda.id"
+        v-model="comanda.mesa"
+        @filter="mesaAutoComplete.filter"
         emit-value
       />
       <q-select
-        option-value="value"
-        option-label="label"
-        :options="[{ label: 'Garçom 1', value: 1 }]"
-        label="Selecionar garçom"
+        option-label="nome"
+        :options="garcomAutoComplete.options"
+        label="Digite e selecione o garçom"
         clearable
         outlined
+        use-input
         dense
+        v-model="comanda.garcom"
+        @filter="garcomAutoComplete.filter"
         emit-value
       />
-      <q-checkbox label="Para viagem" color="primary" />
+      <q-checkbox
+        dense
+        v-model="comanda.paraViagem"
+        label="Para viagem"
+        color="primary"
+      />
+
+      <div class="row justify-end">
+        <q-btn label="Salvar" :disabled="disableSave" color="primary" @click="salvar()" />
+      </div>
+
     </div>
   </q-card>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { Comanda } from "../../core/model/Comanda";
+import { NivelAcessoEnum } from "../../core/model/Usuario";
+import MesaService from "../../core/services/MesaService";
+import UsuarioService from "../../core/services/UsuarioService";
+import AutoComplete from "../../core/utils/AutoComplete";
 
 @Component({
   components: {},
 })
-export default class DadosIniciaisCard extends Vue {}
+export default class DadosIniciaisCard extends Vue {
+  garcomAutoComplete = new AutoComplete({
+    loadCallback: (q) => UsuarioService.list({ q, nivelAcesso: NivelAcessoEnum.GARCOM } as any),
+  });
+  mesaAutoComplete = new AutoComplete({
+    loadCallback: (q) => MesaService.list({ q } as any),
+  });
+
+  @Prop({ required: true })
+  comanda: Comanda;
+
+  salvar() {
+    this.$emit("salvar");
+  }
+
+  get disableSave() {
+    return !this.comanda.mesa || !this.comanda.garcom
+  }
+}
 </script>
 
 <style>

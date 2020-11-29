@@ -6,31 +6,31 @@
           <div class="column items-center q-gutter-y-sm">
             <span class="text-bold text-primary"> MESA</span>
             <div class="bg-grey-4 q-pa-md rounded-borders q-px-lg">
-              <span class="text-h6 text-bold"> 444 </span>
+              <span class="text-h6 text-bold"> {{ comanda.mesa.numero }} </span>
             </div>
           </div>
           <q-separator vertical />
           <div class="column q-gutter-y-sm">
             <div class="row items-center q-gutter-x-md">
               <span class="">
-                Comanda <span class="text-primary text-bold">#05</span>
+                Comanda <span class="text-primary text-bold">#{{comanda.id}}</span>
               </span>
             </div>
             <span>
-              <span class="text-primary text-bold">Garçom:</span> Bruno
+              <span class="text-primary text-bold">Garçom:</span> {{comanda.garcom.nome}}
             </span>
             <span>
               <span class="text-primary text-bold col-4">Para viagem:</span>
-              {{ true | booleanLabel }}
+              {{ comanda.paraViagem | booleanLabel }}
             </span>
             <span>
               <span class="text-primary text-bold col-4">Status:</span>
-              finalizado
+              {{comanda.status | statusComanda}}
             </span>
             <div class="tag-preco q-mt-sm q-px-md">
               <div class="row q-gutter-x-sm justify-center items-center">
                 <span class="q-pl-sm text-subtitle1 text-primary">
-                  Valor parcial: {{ 100 | money }}
+                  Valor parcial: {{ comanda.valorTotal | money }}
                 </span>
                 <q-icon name="las la-tag" size="16px" class="text-primary" />
               </div>
@@ -96,25 +96,25 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { Usuario } from "../../core/model/Usuario";
+import { Comanda } from "../../core/model/Comanda";
 
 @Component({
   components: {},
 })
 export default class ComandaCard extends Vue {
   @Prop({ required: true })
-  usuario: Usuario;
+  comanda: Comanda;
 
   pagar() {
-    this.$emit("pagar", this.usuario.id);
+    this.$emit("pagar", this.comanda.id);
   }
 
   excluir() {
-    this.$emit("excluir", this.usuario.id);
+    this.$emit("excluir", this.comanda.id);
   }
 
   editar() {
-    this.$emit("editar", this.usuario.id);
+    this.$router.push(`/comandas/${this.comanda.id}`)
   }
 }
 </script>

@@ -6,13 +6,14 @@
       />
       <div class="column items-center q-gutter-y-sm">
         <div class="row q-gutter-x-sm items-center">
-          <q-btn icon="las la-chevron-circle-left" flat round size="14px" color="primary" />
+          <q-btn :disabled="(!item || item.quantidade < 2) " icon="las la-chevron-circle-left" flat round size="14px" color="primary" @click="decrementar()" />
           <span class="text-bold text-primary">
-            {{ 2 }}
+            {{ item? item.quantidade: 0 }}
           </span>
-          <q-btn flat icon="las la-chevron-circle-right" round size="14px" color="primary" />
+          <q-btn flat icon="las la-chevron-circle-right" round size="14px" color="primary" @click="incrementar()" />
         </div>
-        <q-btn label="Adicionar" color="blue-5" />
+        <q-btn v-if="item && item.id" label="Remover" color="red-5" @click="remover" />
+        <q-btn v-else label="Adicionar" color="blue-5" @click="adicionar" :disabled="(!item || !item.quantidade)" />
       </div>
     </div>
   </q-card>
@@ -29,6 +30,33 @@ import { Produto } from "../../core/model/Produto";
 export default class ProdutoComanda extends Vue {
   @Prop({ required: true })
   produto: Produto;
+
+  @Prop()
+  item;
+
+  async decrementar() {
+    await this.$emit("criaItemSeNaoExiste", this.produto)
+    this.item.quantidade--
+    if(this.item.id) {
+      this.$emit("adicionar", this.item)
+    }
+  }
+
+  async incrementar() {
+    await this.$emit("criaItemSeNaoExiste", this.produto)
+    this.item.quantidade++
+     if(this.item.id) {
+      this.$emit("adicionar", this.item)
+    }
+  }
+
+  async adicionar() {
+    this.$emit("adicionar", this.item)
+  }
+
+  async remover() {
+    this.$emit("remover", this.item)
+  }
 }
 </script>
 
