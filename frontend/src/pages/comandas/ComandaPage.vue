@@ -24,6 +24,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import AppHeader from "../../components/AppHeader.vue";
 import { Comanda } from "../../core/model/Comanda";
 import ComandaService from "../../core/services/ComandaService";
+import MesaService from "../../core/services/MesaService";
 import AreaItens from "./AreaItens.vue";
 import DadosIniciaisCard from "./DadosIniciaisCard.vue";
 import ResumoCard from "./ResumoCard.vue";
@@ -73,9 +74,19 @@ export default class ComandaPage extends Vue {
 
   mounted() {
     const { id } = this.$route.params;
+    const { mesa } = this.$route.query;
     if (id !== "novo") {
       this.loadComanda(id);
     }
+
+    if (mesa) {
+      this.carregarMesaReserva(mesa)
+    }
+  }
+
+  async carregarMesaReserva(id) {
+    const mesa = await MesaService.get(id);
+    this.comanda.mesa = mesa;
   }
 }
 </script>

@@ -17,6 +17,7 @@ import { Produto } from "./../model/produto.entity";
 import { CustomAuth } from "../../core/auth/CustomAuth";
 import { ContentType } from "@tsed/schema";
 import { ThreadLocal } from "../../core/services/ThreadLocal";
+import { Ingrediente } from '../model/ingrediente.entity';
 
 const config = require("../../config/config.json");
 
@@ -115,5 +116,10 @@ export class ProdutoCtrl {
   async getFotoPerfil(@PathParams("id") id: number) {
     const produto: any = await Produto.findOneOrFail({ id });
     return (await produto.foto)?.buffer;
+  }
+
+  @Get("/:id/ingredientes")
+  async getIngredientesItem(@PathParams("id") id: number) {
+    return Ingrediente.find({produto:{id}}) 
   }
 }

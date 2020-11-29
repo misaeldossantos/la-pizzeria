@@ -12,10 +12,14 @@
           </span>
           <q-btn flat icon="las la-chevron-circle-right" round size="14px" color="primary" @click="incrementar()" />
         </div>
-        <q-btn v-if="item && item.id" label="Remover" color="red-5" @click="remover" />
-        <q-btn v-else label="Adicionar" color="blue-5" @click="adicionar" :disabled="(!item || !item.quantidade)" />
+        <div class="row q-gutter-md">
+          <q-btn v-if="item && item.id" label="Observações" color="blue-5" @click="abrirObservacoesItem" />
+          <q-btn v-if="item && item.id" label="Remover" color="red-5" @click="remover" />
+          <q-btn v-else label="Adicionar" color="blue-5" @click="adicionar" :disabled="(!item || !item.quantidade)" />
+        </div>
       </div>
     </div>
+    <observacoes-item-dialog ref="observacoesItemDialog" :item="item"/>
   </q-card>
 </template>
 
@@ -23,9 +27,10 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ProdutoGeneralCard from "../../components/produtos/ProdutoGeneralCard.vue";
 import { Produto } from "../../core/model/Produto";
+import ObservacoesItemDialog from "./ObservacoesItemDialog";
 
 @Component({
-  components: { ProdutoGeneralCard },
+  components: { ProdutoGeneralCard, ObservacoesItemDialog },
 })
 export default class ProdutoComanda extends Vue {
   @Prop({ required: true })
@@ -56,6 +61,10 @@ export default class ProdutoComanda extends Vue {
 
   async remover() {
     this.$emit("remover", this.item)
+  }
+
+  async abrirObservacoesItem() {
+    this.$refs.observacoesItemDialog.show();
   }
 }
 </script>

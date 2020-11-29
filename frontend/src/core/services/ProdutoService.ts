@@ -20,5 +20,10 @@ export default {
   async get(id) {
     const {data} = await httpRequest.get(`/api/produtos/${id}`)
     return data
+  },
+
+  async getIngredientesItem(id) {
+    const {data} = await httpRequest.get(`/api/produtos/${id}/ingredientes`)
+    return data
   }
 }

@@ -57,7 +57,7 @@
     </q-card-actions>
 
     <q-card-actions align="center" v-else-if="mesa.disponivel">
-      <q-item :disable="loading" clickable class="bottom-button">
+      <q-item :disable="loading" clickable @click="$router.push(`/comandas/novo?mesa=${mesa.id}`)" class="bottom-button">
         <q-item-section> Reservar mesa </q-item-section>
       </q-item>
     </q-card-actions>
