@@ -6,7 +6,7 @@ export default {
     const {data} = await httpRequest.post("/api/produtos", produto)
     return data
   },
-  async list({ q, rpp, page, categoria }) {
+  async list({ q, rpp, page, categoria }: any = {}) {
     const {data} = await httpRequest.get("/api/produtos", {
       params: {
         q, rpp, page, categoria

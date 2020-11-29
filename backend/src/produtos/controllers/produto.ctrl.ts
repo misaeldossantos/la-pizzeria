@@ -45,7 +45,6 @@ export class ProdutoCtrl {
   async getFoto() {}
 
   @Get("/:id")
-  @ReturnType(Produto)
   async get(@PathParams("id") id: number) {
     const produto = await Produto.findOne({ where: {id}, relations: ["ingredientes"] });
 
@@ -112,7 +111,6 @@ export class ProdutoCtrl {
   }
 
   @ContentType("application/octet-stream")
-  @CustomAuth({ isFile: true })
   @Get("/:id/foto")
   async getFotoPerfil(@PathParams("id") id: number) {
     const produto: any = await Produto.findOneOrFail({ id });

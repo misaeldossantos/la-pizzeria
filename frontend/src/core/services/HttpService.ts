@@ -2,7 +2,7 @@ import axios from "axios";
 import { Notify } from "quasar";
 
 export const httpRequest = axios.create({
-  baseURL: "http://localhost:8083"
+  baseURL: "http://10.0.1.102:8083"
 });
 
 httpRequest.interceptors.request.use((request) => {

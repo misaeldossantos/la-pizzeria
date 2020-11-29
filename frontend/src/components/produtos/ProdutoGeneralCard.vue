@@ -8,23 +8,25 @@
     />
     <div class="column col-grow">
       <div class="row items-center q-gutter-x-md">
-        <span class="text-h6 text-bold"> {{produto.descricao}} </span>
+        <span class="text-h6 text-bold"> {{ produto.descricao }} </span>
         <span
+          v-if="!ocultaCodigo"
           class="codigo q-px-md q-py-sm bg-grey-4 text-bold text-primary rounded-borders"
-          >
-            #{{produto.id}}
-          </span
         >
+          #{{ produto.id }}
+        </span>
       </div>
       <span class="text-primary">
         {{ produto.categoria | categoriaProduto }}
       </span>
-      <div class="tag-preco q-mt-sm">
-        <div class="row q-gutter-x-sm justify-center items-center">
-          <span class="q-pl-sm text-subtitle1 text-primary">
-            {{ produto.preco | money }}</span
-          >
-          <q-icon name="las la-tag" size="16px" class="text-primary" />
+      <div class="row">
+        <div class="tag-preco q-mt-sm">
+          <div class="row q-gutter-x-sm justify-center items-center">
+            <span class="q-pl-sm text-subtitle1 text-primary">
+              {{ produto.preco | money }}</span
+            >
+            <q-icon name="las la-tag" size="16px" class="text-primary" />
+          </div>
         </div>
       </div>
     </div>
@@ -41,6 +43,9 @@ import { Produto } from "../../core/model/Produto";
 export default class ProdutoGeneralCard extends Vue {
   @Prop({ required: true })
   produto: Produto;
+
+  @Prop()
+  ocultaCodigo: boolean;
 }
 </script>
 

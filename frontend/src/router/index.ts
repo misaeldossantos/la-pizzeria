@@ -22,6 +22,11 @@ export default route(function({ Vue }) {
   });
 
   Router.beforeEach((to, from, next) => {
+    if(to.meta.public) {
+      next()
+      return;
+    }
+
     let registered = window.localStorage["token"];
 
     if (!registered && to.fullPath !== "/login") {

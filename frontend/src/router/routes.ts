@@ -20,6 +20,14 @@ const routes: RouteConfig[] = [
     component: () => import("pages/login/Index.vue")
   },
 
+  {
+    path: '/cardapio',
+    meta: {
+      public: true
+    },
+    component: () => import("pages/cardapio/Index.vue")
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {
