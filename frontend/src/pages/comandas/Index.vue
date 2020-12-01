@@ -84,9 +84,10 @@ import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
 import { confirmExclusao, showConfirm } from "../../core/utils/AlertUtils";
 import ComandaCard from "./ComandaCard.vue";
 import ComandaService from "../../core/services/ComandaService";
+import NotificarDialog from './NotificarDialog.vue'
 
 @Component({
-  components: { AppHeader, CadastroUsuarioDialog, ComandaCard },
+  components: { AppHeader, NotificarDialog, ComandaCard },
 })
 export default class Comandas extends Vue {
   q = "";
@@ -125,10 +126,10 @@ export default class Comandas extends Vue {
     this.load();
   }
 
-  async pagar(id) {
+  async pagar(comanda) {
     const confirmado = await showConfirm("Deseja realmente realizar o pagamento desta comanda?");
     if (confirmado) {
-      this.$router.push('/caixa')
+      this.$router.push('/caixa?mesa=' + comanda.mesa.numero)
       this.load();
     }
   }

@@ -9,4 +9,9 @@ export class MesaService {
           await mesa.save()
      }
 
+     async disponibilizarMesa(mesa: Mesa) {
+          mesa.disponivel = true
+          await mesa.save()
+     }
+
 }

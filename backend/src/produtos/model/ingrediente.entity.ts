@@ -10,7 +10,7 @@ export class Ingrediente extends Bean {
   descricao: string;
 
   @Property()
-  @ManyToOne(() => Produto, { lazy: true, onDelete: "CASCADE" })
+  @ManyToOne(() => Produto, produto => produto.ingredientes, { lazy: true, onDelete: "CASCADE" })
   @JoinColumn({name: "produto_id"})
   produto: Produto;
 }

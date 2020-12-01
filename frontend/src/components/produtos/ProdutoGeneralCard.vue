@@ -8,7 +8,7 @@
     />
     <div class="column col-grow">
       <div class="row items-center q-gutter-x-md">
-        <span class="text-h6 text-bold"> {{ produto.descricao }} </span>
+        <span class="text-h6 text-bold"> {{ produto.descricao }}</span>
         <span
           v-if="!ocultaCodigo"
           class="codigo q-px-md q-py-sm bg-grey-4 text-bold text-primary rounded-borders"

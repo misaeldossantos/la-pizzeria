@@ -24,5 +24,9 @@ export default {
   async gerarIntervalo(intervalo) {
     const {data} = await httpRequest.post(`/api/mesas/intervalo`, intervalo)
     return data
+  },
+  async getComandaByMesa(numero) {
+    const {data} = await httpRequest.get(`/api/mesas/numero/${numero}/comanda`)
+    return data
   }
 }

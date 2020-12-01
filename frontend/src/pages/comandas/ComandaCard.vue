@@ -13,19 +13,24 @@
           <div class="column q-gutter-y-sm">
             <div class="row items-center q-gutter-x-md">
               <span class="">
-                Comanda <span class="text-primary text-bold">#{{comanda.id}}</span>
+                Comanda
+                <span class="text-primary text-bold">#{{ comanda.id }}</span>
               </span>
             </div>
             <span>
-              <span class="text-primary text-bold">Garçom:</span> {{comanda.garcom.nome}}
+              <span class="text-primary text-bold">Garçom:</span>
+              {{ comanda.garcom.nome }}
             </span>
             <span>
               <span class="text-primary text-bold col-4">Para viagem:</span>
               {{ comanda.paraViagem | booleanLabel }}
             </span>
-            <span>
-              <span class="text-primary text-bold col-4">Status:</span>
-              {{comanda.status | statusComanda}}
+            <span class="row items-center">
+              <span class="text-primary text-bold q-mr-sm">Status:</span>
+              <status-comanda-indicator :status="comanda.status" />
+              <span>
+                {{ comanda.status | statusComanda }}
+              </span>
             </span>
             <div class="tag-preco q-mt-sm q-px-md">
               <div class="row q-gutter-x-sm justify-center items-center">
@@ -38,12 +43,8 @@
           </div>
         </div>
         <div class="row items-center q-gutter-x-md">
-          <q-btn
-            icon="las la-bullhorn"
-            round
-            color="orange"
-          >
-          <q-tooltip
+          <q-btn icon="las la-bullhorn" round color="orange">
+            <q-tooltip
               content-class="bg-grey-8"
               content-style="font-size: 14px"
               :offset="[10, 10]"
@@ -55,7 +56,7 @@
             icon="las la-money-bill"
             round
             color="positive"
-            @click="$router.push('/caixa')"
+            @click="pagar"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -96,17 +97,21 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import StatusComandaIndicator from "../../components/StatusComandaIndicator.vue";
 import { Comanda } from "../../core/model/Comanda";
 
 @Component({
-  components: {},
+  components: { StatusComandaIndicator },
 })
 export default class ComandaCard extends Vue {
   @Prop({ required: true })
   comanda: Comanda;
 
+  abrirModal() {
+    (this.$refs.cadastroDialogRef as any).show();
+  }
   pagar() {
-    this.$emit("pagar", this.comanda.id);
+    this.$emit("pagar", this.comanda);
   }
 
   excluir() {
@@ -114,7 +119,7 @@ export default class ComandaCard extends Vue {
   }
 
   editar() {
-    this.$router.push(`/comandas/${this.comanda.id}`)
+    this.$router.push(`/comandas/${this.comanda.id}`);
   }
 }
 </script>

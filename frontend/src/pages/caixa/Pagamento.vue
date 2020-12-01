@@ -9,7 +9,6 @@
     </div>
     <div class="column q-pa-md q-gutter-y-md">
       <span class="text-h6">Pagamento</span>
-
       <q-stepper
         v-model="step"
         ref="stepper"
@@ -28,46 +27,7 @@
           active-color="primary"
           style="min-height: 400px"
         >
-          <div style="max-width: 400px" class="column q-gutter-y-md">
-            <q-tabs
-              v-model="formaPagamento"
-              class="text-grey-8"
-              dense
-              inline-label
-              indicator-color="primary"
-              align="justify"
-              active-color="primary"
-            >
-              <q-tab
-                icon="las la-money-bill"
-                name="DINHEIRO"
-                label="Dinheiro"
-              />
-              <q-tab
-                icon="las la-credit-card"
-                name="CARTAO"
-                label="Cartão de crédito"
-              />
-            </q-tabs>
-
-            <div class="content">
-              <div v-if="formaPagamento === 'DINHEIRO'">
-                <q-input label="Valor pago" />
-              </div>
-              <div class="column q-gutter-y-sm q-pt-md">
-                <q-checkbox
-                  dense
-                  label="Aniversariante do dia"
-                  v-model="aniversariante"
-                />
-                <q-input
-                  mask="##/##/####"
-                  label="Data de nascimento"
-                  v-if="aniversariante"
-                />
-              </div>
-            </div>
-          </div>
+          <inserir-dados :pagamento="pagamento" />
         </q-step>
 
         <q-step
@@ -78,24 +38,29 @@
           :done="step > 2"
           style="min-height: 400px"
         >
-        <div class="column text-right q-gutter-y-md justify-end q-pa-md">
+          <div v-if="enviandoDados" class="column text-right q-gutter-y-md justify-end q-pa-md">
             <span class="text-h6"> Calculando descontos...</span>
             <span class="text-h6"> Calculando valor total... </span>
+          </div>
+          <div
+            v-else-if="valores"
+            class="column text-right q-gutter-y-md justify-end q-pa-md"
+          >
+            <span :key="index" v-for="(desconto, index) of valores.descontos">
+              {{ desconto }}
+            </span>
+            <span>
+              Percentual de descontos: {{ valores.totalPercDesconto }}%
+            </span>
+            <span v-if="valores.troco">
+              Troco: <span class="text-bold">{{valores.troco | money}}</span>
+            </span>
+            <div class="row q-gutter-x-sm items-center justify-end">
+              <span class="text-h6">Valor a ser pago:</span>
+              <span class="text-h6 text-bold text-primary">{{ valores.valorTotal | money }}</span>
+            </div>
 
           </div>
-          <!-- <div class="column text-right q-gutter-y-md justify-end q-pa-md">
-            <span class="text-h6"> 1. Desconto pagamento no dinheiro 5%. </span>
-            <span class="text-h6"> 2. Desconto pagamento no dinheiro 5%. </span>
-            <span class="text-h6"> 3. Desconto pagamento no dinheiro 5%. </span>
-            <span class="text-bold text-h6">
-              Valor do troco:
-              <span class="text-primary">{{ 20 | money }}</span>
-            </span>
-            <span class="text-bold text-h6">
-              Valor a ser pago:
-              <span class="text-primary">{{ 100 | money }}</span>
-            </span>
-          </div> -->
         </q-step>
 
         <q-step
@@ -133,6 +98,7 @@
               color="blue"
               @click="pagar()"
               label="Pagar"
+              :disabled="enviandoDados"
             />
             <q-btn
               v-if="step == 1"
@@ -148,12 +114,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { Comanda } from "../../core/model/Comanda";
+import InserirDados from "./InserirDados.vue";
+import PagamentoService from "../../core/services/PagamentoService";
+import dayjs from "dayjs";
 
-const messages = ["Inserindo cartão", "Selecionando as parcelas", "Aguardando dados", "Confirmando pagamento", "Transação aceita"];
+const messages = [
+  "Inserindo cartão",
+  "Selecionando as parcelas",
+  "Aguardando dados",
+  "Confirmando pagamento",
+  "Transação aceita",
+];
 
 @Component({
-  components: {},
+  components: { InserirDados },
 })
 export default class Pagamento extends Vue {
   step = 1;
@@ -161,14 +137,46 @@ export default class Pagamento extends Vue {
   message = "";
   formaPagamento = "DINHEIRO";
   aniversariante = false;
+  enviandoDados = false;
 
-  pagamento = {
-    cartao: "",
-    nomeTitular: "",
-  };
+  @Prop()
+  comanda: Comanda;
+
+  pagamento = null;
+
+  valores = null;
+
+  @Watch("comanda", { immediate: true })
+  onComandaChange(comanda) {
+    this.pagamento = {
+      comanda,
+    };
+  }
 
   async enviarDados() {
-    (this.$refs.stepper as any).next();
+    this.step++;
+    try {
+      this.enviandoDados = true;
+      const base = { ...this.pagamento };
+      if (base.dataNascimento) {
+        base.dataNascimento = dayjs(base.dataNascimento, "DD/MM/YYYY").format(
+          "YYYY-MM-DD"
+        );
+      }
+
+      base.comanda = {
+        id: base.comanda.id,
+      };
+      const { pagamento, valores } = await PagamentoService.gerarPagamento(
+        base
+      );
+      this.pagamento.id = pagamento.id;
+      this.valores = valores;
+    } catch (e) {
+      this.step--;
+    } finally {
+      this.enviandoDados = false;
+    }
   }
 
   async pagar() {

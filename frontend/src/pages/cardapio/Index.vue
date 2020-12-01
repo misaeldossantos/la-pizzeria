@@ -37,6 +37,9 @@
             <q-tab icon="las la-glass-cheers" name="BEBIDA" label="Bebidas" />
           </q-tabs>
         </div>
+        <div v-if="!produtos.length" class="column items-center q-pa-md">
+          Nada encontrado!
+        </div>
         <div v-for="produto of produtos" :key="produto.id">
           <div class="q-pa-md">
             <produto-general-card :ocultaCodigo="true" :produto="produto" />
@@ -70,7 +73,8 @@ export default class Cardapio extends Vue {
     try {
       this.loading = true;
       this.produtos = (await ProdutoService.list({
-        categoria: this.tab === "todos"? null: this.tab
+        categoria: this.tab === "todos"? null: this.tab,
+        relations: ['ingredientes', 'foto']
       })).list;
     } catch (e) {
       console.log(e);

@@ -5,23 +5,26 @@
       <div class="column q-gutter-y-sm">
         <div class="row items-center q-gutter-x-md">
           <span class="">
-            Comanda <span class="text-primary text-bold">#05</span>
+            Comanda <span class="text-primary text-bold">#{{comanda.id}}</span>
           </span>
         </div>
-        <span> <span class="text-primary text-bold">Garçom:</span> Bruno </span>
+        <span> <span class="text-primary text-bold">Garçom:</span> {{comanda.garcom.nome}} </span>
         <span>
           <span class="text-primary text-bold col-4">Para viagem:</span>
-          {{ true | booleanLabel }}
+          {{ comanda.paraViagem | booleanLabel }}
         </span>
-        <span>
-          <span class="text-primary text-bold col-4">Status:</span>
-          finalizado
+        <span class="row items-center">
+          <span class="text-primary text-bold q-mr-sm">Status:</span>
+          <status-comanda-indicator :status="comanda.status" />
+          <span>
+            {{ comanda.status | statusComanda }}
+          </span>
         </span>
         <div class="row">
           <div class="tag-preco q-mt-sm q-px-md">
             <div class="row q-gutter-x-sm justify-center items-center">
               <span class="q-pl-sm text-subtitle1 text-primary">
-                Total da comanda: {{ 100 | money }}
+                Total da comanda: {{ comanda.valorTotal | money }}
               </span>
               <q-icon name="las la-tag" size="16px" class="text-primary" />
             </div>
@@ -34,11 +37,16 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { Comanda } from "../../core/model/Comanda";
+import StatusComandaIndicator from "../../components/StatusComandaIndicator.vue";
 
 @Component({
-  components: {},
+  components: { StatusComandaIndicator },
 })
-export default class DadosComanda extends Vue {}
+export default class DadosComanda extends Vue {
+  @Prop({ required: true })
+  comanda: Comanda;
+}
 </script>
 
 <style lang="stylus" scoped>

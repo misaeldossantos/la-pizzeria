@@ -25,11 +25,17 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import { Comanda } from "../../core/model/Comanda";
 
 @Component({
   components: {},
 })
-export default class DadosIniciaisCard extends Vue {}
+export default class DadosIniciaisCard extends Vue {
+
+  @Prop({ required: true })
+  comanda: Comanda;
+
+}
 </script>
 
 <style scoped>

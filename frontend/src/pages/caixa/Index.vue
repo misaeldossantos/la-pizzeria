@@ -3,8 +3,8 @@
     <app-header title="Caixa" />
     <div class="column q-gutter-y-md q-py-lg q-px-md">
       <div class="row q-gutter-x-md justify-start">
-        <q-select
-          v-model="q"
+        <q-input
+          v-model.number="q"
           outlined
           :size="40"
           placeholder="Insira o número da mesa"
@@ -13,15 +13,15 @@
           dense
           use-input
           type="number"
-          class="col-2"
+          class="col-3"
         />
-        <q-btn color="primary" icon="search" size="14px" @click="load"/>
+        <q-btn color="primary" icon="search" size="14px" @click="loadComanda" />
       </div>
     </div>
     <div class="row q-pa-md">
-      <div class="row col-grow q-gutter-x-md items-start">
-        <pagamento />
-        <dados-comanda />
+      <div v-if="comanda" class="row col-grow q-gutter-x-md items-start">
+        <pagamento :comanda="comanda" />
+        <dados-comanda :comanda="comanda" />
       </div>
     </div>
   </div>
@@ -38,6 +38,8 @@ import { confirmExclusao } from "../../core/utils/AlertUtils";
 import DadosComanda from "./DadosComanda.vue";
 import Pagamento from "./Pagamento.vue";
 import ResumoCard from "./ResumoCard.vue";
+import { Comanda } from "../../core/model/Comanda";
+import MesaService from "../../core/services/MesaService";
 
 @Component({
   components: { AppHeader, DadosComanda, Pagamento, ResumoCard },
@@ -45,6 +47,8 @@ import ResumoCard from "./ResumoCard.vue";
 export default class Caixa extends Vue {
   q = "";
   page = 1;
+
+  comanda: Comanda = null;
 
   usuarios: Usuario[] = [];
 
@@ -54,33 +58,38 @@ export default class Caixa extends Vue {
     (this.$refs.cadastroDialogRef as any).show();
   }
 
-  async load() {
-    const { list } = await UsuarioService.list({
-      rpp: 10,
-      page: this.page,
-      q: this.q,
-    });
-    this.usuarios = list;
+  async loadComanda() {
+    try {
+      this.$q.loading.show();
+      const comanda = await MesaService.getComandaByMesa(this.q);
+      this.comanda = comanda;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.$q.loading.hide();
+    }
   }
 
-  mounted() {
-    this.load();
-  }
-
-  onChange() {
-    this.load();
-  }
+  onChange() {}
 
   async excluir(id) {
     const confirmado = await confirmExclusao();
     if (confirmado) {
       await UsuarioService.delete(id);
-      this.load();
+      // this.load();
     }
   }
 
   editar(id: number) {
     (this.$refs.cadastroDialogRef as any).show(id);
+  }
+
+  mounted() {
+    const { mesa } = this.$route.query;
+    if (mesa) {
+      this.q = mesa + "";
+      this.loadComanda();
+    }
   }
 }
 </script>
