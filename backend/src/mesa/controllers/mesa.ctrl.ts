@@ -129,7 +129,7 @@ export class MesaCtrl {
     } catch (e) {
       throw new BadRequest(`Não existe comanda para a mesa ${numero}`);
     }
-    if (comanda.status !== StatusComandaEnum.ABERTO) {
+    if (comanda.status === StatusComandaEnum.PAGO) {
       throw new BadRequest("Comanda já está finalizada!");
     }
     return comanda;

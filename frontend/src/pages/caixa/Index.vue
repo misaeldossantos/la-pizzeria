@@ -20,7 +20,7 @@
     </div>
     <div class="row q-pa-md">
       <div v-if="comanda" class="row col-grow q-gutter-x-md items-start">
-        <pagamento :comanda="comanda" />
+        <pagamento :comanda="comanda" @setStatusComanda="setStatusComanda" @concluir="concluir"/>
         <dados-comanda :comanda="comanda" />
       </div>
     </div>
@@ -40,6 +40,7 @@ import Pagamento from "./Pagamento.vue";
 import ResumoCard from "./ResumoCard.vue";
 import { Comanda } from "../../core/model/Comanda";
 import MesaService from "../../core/services/MesaService";
+import { stat } from "fs";
 
 @Component({
   components: { AppHeader, DadosComanda, Pagamento, ResumoCard },
@@ -90,6 +91,14 @@ export default class Caixa extends Vue {
       this.q = mesa + "";
       this.loadComanda();
     }
+  }
+
+  setStatusComanda(status) {
+    this.comanda.status = status
+  }
+
+  concluir() {
+    this.comanda = null
   }
 }
 </script>

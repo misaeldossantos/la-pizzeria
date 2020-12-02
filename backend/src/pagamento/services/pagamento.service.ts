@@ -25,14 +25,15 @@ export class PagamentoService {
 
   async geraPagamento(base: BasePagamento) {
     const {
-      comanda,
       formaPagamento,
     } = base
 
-    base.comanda = await Comanda.findOneOrFail({id: comanda.id})
+    base.comanda = await Comanda.findOneOrFail({id: base.comanda.id})
 
-    if(comanda.status === StatusComandaEnum.PAGO) {
-      throw new BadRequest("Comanda já está paga!")
+    const {comanda} = base
+
+    if(comanda.status !== StatusComandaEnum.FINALIZADO) {
+      throw new BadRequest("Finalize a comanda primeiro!")
     }
 
     const pagamento = new Pagamento()

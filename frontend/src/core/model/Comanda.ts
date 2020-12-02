@@ -3,27 +3,22 @@ import { Mesa } from './Mesa';
 
 export enum StatusComandaEnum {
   ABERTO = "ABERTO",
-  AGUARDANDO = "AGUARDANDO ENTREGA",
-  ENTREGUE = "ENTREGUE",
+  FINALIZADO = "FINALIZADO",
   PAGO = "PAGO"
 }
 
 export const statusComandaLabels = {
   [StatusComandaEnum.ABERTO]: "Aberto",
-  [StatusComandaEnum.AGUARDANDO]: "Aguardando entrega",
-  [StatusComandaEnum.ENTREGUE]: "Entregue",
+  [StatusComandaEnum.FINALIZADO]: "Finalizado",
   [StatusComandaEnum.PAGO]: "Pago"
 }
 
 export const statusComandaOptions = [{
   label: "Aberto",
   value: StatusComandaEnum.ABERTO
-}, {
-  label: "Aguardando entrega",
-  value: StatusComandaEnum.AGUARDANDO
-}, {
-  label: "Entregue",
-  value: StatusComandaEnum.ENTREGUE
+},  {
+  label: "Finalizado",
+  value: StatusComandaEnum.FINALIZADO
 }, {
   label: "Pago",
   value: StatusComandaEnum.PAGO

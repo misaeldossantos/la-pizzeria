@@ -32,5 +32,8 @@ export default {
   async deleteItem(idComanda, idItem) {
     const {data} = await httpRequest.delete(`/api/comandas/${idComanda}/itens/${idItem}`)
     return data
+  },
+  async finalizar(id) {
+    await httpRequest.post(`/api/comandas/${id}/finalizar`)
   }
 }

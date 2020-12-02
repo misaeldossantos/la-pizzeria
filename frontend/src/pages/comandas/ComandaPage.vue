@@ -14,7 +14,7 @@
           @atualizaItens="atualizaItens"
         />
       </div>
-      <resumo-card v-if="comanda.id" :itens="itensIncluidos" />
+      <resumo-card v-if="comanda.id" :itens="itensIncluidos" :comanda="comanda"/>
     </div>
   </q-page>
 </template>

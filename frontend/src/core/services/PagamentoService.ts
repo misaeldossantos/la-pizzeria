@@ -5,8 +5,10 @@ export default {
     const {data} = await httpRequest.post("/api/pagamentos/gerar", base)
     return data
   },
-  async finalizar(id) {
-    const {data} = await httpRequest.post(`/api/pagamentos/${id}/finalizar`)
+  async finalizar(id, mesaId) {
+    const {data} = await httpRequest.post(`/api/pagamentos/${id}/finalizar`, null, {
+      params: {mesaId}
+    })
     return data
   },
 };

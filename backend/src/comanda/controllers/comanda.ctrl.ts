@@ -17,7 +17,7 @@ import { BadRequest, NotFound } from "@tsed/exceptions";
 import { Like } from "typeorm";
 import { PaginatedList } from "../../core/model/paginated-list";
 import { Mesa } from "../../mesa/model/mesa.entity";
-import { ComandaService } from '../services/comanda.service';
+import { ComandaService } from "../services/comanda.service";
 
 @Controller("/comandas")
 export class ComandaCtrl {
@@ -52,7 +52,10 @@ export class ComandaCtrl {
 
   @Get("/:id")
   async get(@PathParams("id") id: number) {
-    const comanda = await Comanda.findOne({ where: {id}, relations: ['mesa', 'garcom']});
+    const comanda = await Comanda.findOne({
+      where: { id },
+      relations: ["mesa", "garcom"],
+    });
 
     if (!comanda) {
       throw new NotFound("Comanda não encontrada");
@@ -91,13 +94,13 @@ export class ComandaCtrl {
     if (paraViagem) {
       options.paraViagem = paraViagem;
     }
-    if (status) {paginatedList.list = await Comanda.find(options);
+    if (status) {
       options.status = status;
     }
 
     paginatedList.list = await Comanda.find({
       where: options,
-      relations: ["mesa", "garcom"]
+      relations: ["mesa", "garcom"],
     });
     return paginatedList;
   }
@@ -119,7 +122,7 @@ export class ComandaCtrl {
   async listItens(@PathParams("id") idComanda: number) {
     return ComandaItem.find({
       where: { comanda: { id: idComanda } },
-      relations: ["produto"]
+      relations: ["produto"],
     });
   }
 
@@ -134,9 +137,9 @@ export class ComandaCtrl {
     } as Comanda;
 
     const itemSalvo = await item.save();
-    await this.comandaService.atualizaValorTotal(idComanda)
+    await this.comandaService.atualizaValorTotal(idComanda);
 
-    return itemSalvo
+    return itemSalvo;
   }
 
   @Delete("/:idComanda/itens/:id")
@@ -150,5 +153,17 @@ export class ComandaCtrl {
     });
     item.remove();
     return item;
+  }
+
+  @Post("/:id/finalizar")
+  async finalizarComanda(@PathParams("id") id: number) {
+    await Comanda.createQueryBuilder()
+      .update(Comanda)
+      .set({ status: StatusComandaEnum.FINALIZADO })
+      .where("id = :id", { id })
+      .execute();
+    return {
+      message: "Comanda finalizada com sucesso!",
+    };
   }
 }

@@ -38,7 +38,10 @@
           :done="step > 2"
           style="min-height: 400px"
         >
-          <div v-if="enviandoDados" class="column text-right q-gutter-y-md justify-end q-pa-md">
+          <div
+            v-if="enviandoDados"
+            class="column text-right q-gutter-y-md justify-end q-pa-md"
+          >
             <span class="text-h6"> Calculando descontos...</span>
             <span class="text-h6"> Calculando valor total... </span>
           </div>
@@ -53,13 +56,14 @@
               Percentual de descontos: {{ valores.totalPercDesconto }}%
             </span>
             <span v-if="valores.troco">
-              Troco: <span class="text-bold">{{valores.troco | money}}</span>
+              Troco: <span class="text-bold">{{ valores.troco | money }}</span>
             </span>
             <div class="row q-gutter-x-sm items-center justify-end">
               <span class="text-h6">Valor a ser pago:</span>
-              <span class="text-h6 text-bold text-primary">{{ valores.valorTotal | money }}</span>
+              <span class="text-h6 text-bold text-primary">{{
+                valores.valorTotal | money
+              }}</span>
             </div>
-
           </div>
         </q-step>
 
@@ -79,7 +83,7 @@
               O pagamento da comanda número 5 foi realizada com sucesso. Para
               realizar outro pagamento, clique em concluir.
             </span>
-            <q-btn label="Concluir" color="green" />
+            <q-btn label="Concluir" color="green" @click="concluir" />
           </div>
         </q-step>
 
@@ -119,6 +123,7 @@ import { Comanda } from "../../core/model/Comanda";
 import InserirDados from "./InserirDados.vue";
 import PagamentoService from "../../core/services/PagamentoService";
 import dayjs from "dayjs";
+import { ComandaService } from "../../../../backend/src/comanda/services/comanda.service";
 
 const messages = [
   "Inserindo cartão",
@@ -183,16 +188,36 @@ export default class Pagamento extends Vue {
     this.loading = true;
     let currentIndex = 0;
     let self = this;
-    const interval = setInterval(() => {
-      if (currentIndex === messages.length) {
-        clearInterval(interval);
-        self.loading = false;
-        (this.$refs.stepper as any).next();
-        return;
-      }
+    if (this.pagamento.formaPagamento === "CARTAO") {
       self.message = messages[currentIndex];
-      currentIndex++;
-    }, 2000);
+      await new Promise((resolve: any) => {
+        const interval = setInterval(() => {
+          if (currentIndex === messages.length) {
+            clearInterval(interval);
+            resolve();
+          }
+          self.message = messages[currentIndex];
+          currentIndex++;
+        }, 2000);
+      });
+    } else {
+      self.message = "Aguarde enquanto processamos seu pagamento"
+    }
+
+    try {
+      await PagamentoService.finalizar(this.pagamento.id, this.comanda.mesa.id);
+      this.step++
+      this.$set(this.comanda, "status", "PAGO")
+    } catch (e) {
+      console.log(e);
+    } finally {
+      self.loading = false;
+    }
+    // (this.$refs.stepper as any).next();
+  }
+
+  concluir() {
+    this.$emit("concluir")
   }
 }
 </script>

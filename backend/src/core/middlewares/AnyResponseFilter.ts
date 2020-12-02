@@ -15,6 +15,11 @@ export class AnyResponseFilter implements ResponseFilterMethods {
     if (data instanceof Buffer) {
       return bufferToStream(data)
     }
+    for(let key in data) {
+      if(key.startsWith("__")) {
+        data[key.replace(/[_]/gi, "")] = data[key]
+      }
+    }
     return data;
   }
 }

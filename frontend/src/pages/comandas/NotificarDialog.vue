@@ -36,7 +36,23 @@ import { confirmExclusao } from "../../core/utils/AlertUtils";
 @Component({
   components: { },
 })
-export default class ProdutoDialog extends Vue {}
+export default class NotificarDialog extends Vue {
+  dialogOpened = false;
+
+  show(id) {
+    this.dialogOpened = true
+    this.loadComanda(id)
+  }
+
+  loadComanda(id) {
+    // TODO: implementar
+  }
+
+  get isNew() {
+    return true;
+  }
+
+}
 </script>
 
 <style>

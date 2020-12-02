@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="row items-center q-gutter-x-md">
-          <q-btn icon="las la-bullhorn" round color="orange">
+          <q-btn icon="las la-bullhorn" @click="notificar" round color="orange">
             <q-tooltip
               content-class="bg-grey-8"
               content-style="font-size: 14px"
@@ -120,6 +120,10 @@ export default class ComandaCard extends Vue {
 
   editar() {
     this.$router.push(`/comandas/${this.comanda.id}`);
+  }
+
+  notificar() {
+    this.$emit("notificar", this.comanda.id);
   }
 }
 </script>

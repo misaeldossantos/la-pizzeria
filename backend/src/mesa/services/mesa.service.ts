@@ -10,6 +10,7 @@ export class MesaService {
      }
 
      async disponibilizarMesa(mesa: Mesa) {
+          console.log(mesa)
           mesa.disponivel = true
           await mesa.save()
      }

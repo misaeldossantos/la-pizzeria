@@ -65,13 +65,12 @@
         @pagar="pagar"
         @excluir="excluir"
         @editar="editar"
+        @notificar="abrirModalNotificacao"
       />
     </div>
 
-    <cadastro-usuario-dialog
-      ref="cadastroDialogRef"
-      @onSave="onChange"
-      @onDelete="onChange"
+    <notificar-dialog
+      ref="notificarDialogRef"
     />
   </div>
 </template>
@@ -101,6 +100,10 @@ export default class Comandas extends Vue {
 
   cadastrarNovo() {
     this.$router.push("/comandas/novo")
+  }
+
+  abrirModalNotificacao(idComanda) {
+    (this.$refs.notificarDialogRef as any).show(idComanda)
   }
 
   @Watch("tab")
