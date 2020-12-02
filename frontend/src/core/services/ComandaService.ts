@@ -35,5 +35,8 @@ export default {
   },
   async finalizar(id) {
     await httpRequest.post(`/api/comandas/${id}/finalizar`)
+  },
+  async notificarEntrega(id, ids) {
+    await httpRequest.post(`/api/comandas/${id}/itens/entrega`, {ids})
   }
 }

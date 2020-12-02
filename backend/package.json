@@ -22,6 +22,7 @@
     "@tsed/socketio": "6.2.0",
     "@tsed/swagger": "6.2.0",
     "@tsed/typeorm": "6.2.0",
+    "@types/uuid": "^8.3.0",
     "async-local-storage": "^2.3.1",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
@@ -35,7 +36,8 @@
     "lodash": "^4.17.20",
     "method-override": "3.0.0",
     "mysql": "2.18.1",
-    "typeorm": "0.2.29"
+    "typeorm": "0.2.29",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@tsed/cli-plugin-typeorm": "2.0.0",

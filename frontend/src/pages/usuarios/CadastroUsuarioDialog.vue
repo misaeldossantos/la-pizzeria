@@ -37,9 +37,6 @@
                   type="password"
                   clearable
                 />
-                <span class="text-grey-8 text-caption">
-                  A senha deve ter pelo menos 8 caracteres
-                </span>
               </div>
               <div>
                 <q-select

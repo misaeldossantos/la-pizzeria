@@ -27,7 +27,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ProdutoGeneralCard from "../../components/produtos/ProdutoGeneralCard.vue";
 import { Produto } from "../../core/model/Produto";
-import ObservacoesItemDialog from "./ObservacoesItemDialog";
+import ObservacoesItemDialog from "./ObservacoesItemDialog.vue";
 
 @Component({
   components: { ProdutoGeneralCard, ObservacoesItemDialog },
@@ -64,7 +64,7 @@ export default class ProdutoComanda extends Vue {
   }
 
   async abrirObservacoesItem() {
-    this.$refs.observacoesItemDialog.show();
+    (this.$refs.observacoesItemDialog as any).show()
   }
 }
 </script>

@@ -43,7 +43,13 @@
           </div>
         </div>
         <div class="row items-center q-gutter-x-md">
-          <q-btn icon="las la-bullhorn" @click="notificar" round color="orange">
+          <q-btn
+            icon="las la-bullhorn"
+            @click="notificar"
+            round
+            color="orange"
+            v-if="comandaAberta"
+          >
             <q-tooltip
               content-class="bg-grey-8"
               content-style="font-size: 14px"
@@ -57,6 +63,7 @@
             round
             color="positive"
             @click="pagar"
+            v-if="comanda.status !== 'PAGO'"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -66,7 +73,13 @@
               Pagar
             </q-tooltip>
           </q-btn>
-          <q-btn icon="las la-edit" round color="blue" @click="editar">
+          <q-btn
+            icon="las la-edit"
+            round
+            color="blue"
+            @click="editar"
+            v-if="comandaAberta"
+          >
             <q-tooltip
               content-class="bg-grey-8"
               content-style="font-size: 14px"
@@ -80,6 +93,7 @@
             round
             color="negative"
             @click="excluir"
+            v-if="comandaAberta"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -124,6 +138,10 @@ export default class ComandaCard extends Vue {
 
   notificar() {
     this.$emit("notificar", this.comanda.id);
+  }
+
+  get comandaAberta() {
+    return this.comanda.status === "ABERTO";
   }
 }
 </script>

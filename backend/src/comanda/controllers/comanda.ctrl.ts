@@ -166,4 +166,17 @@ export class ComandaCtrl {
       message: "Comanda finalizada com sucesso!",
     };
   }
+
+  @Post("/:id/itens/entrega")
+  async notificarEntrega(
+    @PathParams("id") idComanda: number,
+    @BodyParams("ids") ids: number[]
+  ) {
+    await ComandaItem.createQueryBuilder()
+      .update(ComandaItem)
+      .set({ entregue: true })
+      .where("id in (:ids)", { ids })
+      .execute();
+    this.comandaService.notificar(idComanda, ids);
+  }
 }

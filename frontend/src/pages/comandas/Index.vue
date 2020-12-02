@@ -32,7 +32,7 @@
 
       <q-separator inset />
 
-      <div style="max-width: 400px">
+      <div style="max-width: 500px">
         <q-tabs
           v-model="tab"
           class="bg-grey-1 text-grey-8"
@@ -45,6 +45,7 @@
           <q-tab name="todos" label="Todas" />
           <q-tab icon="las la-clipboard" name="ABERTO" label="Abertas" />
           <q-tab icon="las la-clipboard-check" name="FINALIZADO"  label="Finalizadas" />
+          <q-tab icon="las la-file-invoice-dollar" name="PAGO"  label="Pagas" />
         </q-tabs>
       </div>
 
