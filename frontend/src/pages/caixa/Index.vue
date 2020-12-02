@@ -20,7 +20,7 @@
     </div>
     <div class="row q-pa-md">
       <div v-if="comanda" class="row col-grow q-gutter-x-md items-start">
-        <pagamento :comanda="comanda" @setStatusComanda="setStatusComanda" @concluir="concluir"/>
+        <pagamento :comanda="comanda" @setStatusComanda="setStatusComanda" @concluir="concluir" @finalizado="onFinalizar"/>
         <dados-comanda :comanda="comanda" />
       </div>
     </div>
@@ -99,6 +99,10 @@ export default class Caixa extends Vue {
 
   concluir() {
     this.comanda = null
+  }
+
+  onFinalizar() {
+    this.q = ""
   }
 }
 </script>

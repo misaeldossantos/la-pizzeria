@@ -85,7 +85,7 @@ export default class Usuarios extends Vue {
       rpp: 10,
       page: this.page,
       q: this.q,
-    });
+    } as any);
     this.usuarios = list;
   }
 

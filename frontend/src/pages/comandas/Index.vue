@@ -8,7 +8,7 @@
             v-model.number="q"
             outlined
             :size="40"
-            placeholder="Pesquise por mesa..."
+            placeholder="Pesquise por código da comanda..."
             @keyup.enter="load"
             dense
             bg-color="white"
@@ -133,6 +133,7 @@ export default class Comandas extends Vue {
   async pagar(comanda) {
     const confirmado = await showConfirm("Deseja realmente realizar o pagamento desta comanda?");
     if (confirmado) {
+      await ComandaService.finalizar(comanda.id)
       this.$router.push('/caixa?mesa=' + comanda.mesa.numero)
       this.load();
     }

@@ -208,6 +208,7 @@ export default class Pagamento extends Vue {
       await PagamentoService.finalizar(this.pagamento.id, this.comanda.mesa.id);
       this.step++
       this.$set(this.comanda, "status", "PAGO")
+      this.$emit("finalizado")
     } catch (e) {
       console.log(e);
     } finally {

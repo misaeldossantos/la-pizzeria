@@ -37,21 +37,17 @@
 
 <script lang="ts">
 import NotificacaoService from "../core/services/NotificacaoService";
+import MemoryService from "../core/services/MemoryService";
+import {reaction} from 'mobx'
 
 export default {
+  props: ['title'],
   data() {
     return {
       notificacoes: [],
     };
   },
   methods: {
-    async loadNotificacoes() {
-      try {
-        this.notificacoes = await NotificacaoService.getNotificacoes();
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async remove(id) {
       try {
         await NotificacaoService.remove(id);
@@ -62,13 +58,9 @@ export default {
     },
   },
   mounted() {
-    // TODO: verificar se usuário é garçom
-    this.interval = setInterval(() => {
-      this.loadNotificacoes();
-    }, 3000);
-  },
-  unmounted() {
-    clearInterval(this.interval);
+    reaction(() => MemoryService.notificacoes, (notificacoes) => {
+      this.notificacoes = notificacoes
+    })
   },
 };
 </script>

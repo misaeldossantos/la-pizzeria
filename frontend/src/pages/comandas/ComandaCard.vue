@@ -70,7 +70,7 @@
               content-style="font-size: 14px"
               :offset="[10, 10]"
             >
-              Pagar
+              Finalizar e Pagar
             </q-tooltip>
           </q-btn>
           <q-btn

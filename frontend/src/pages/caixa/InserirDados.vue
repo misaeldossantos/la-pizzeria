@@ -1,17 +1,19 @@
 <template>
   <div style="max-width: 400px" class="column q-gutter-y-md">
-    <div>
+    <div class="row q-gutter-x-md">
       <q-radio
         icon="las la-money-bill"
         val="DINHEIRO"
         v-model="pagamento.formaPagamento"
         label="Dinheiro"
+        dense
       />
       <q-radio
         v-model="pagamento.formaPagamento"
         icon="las la-credit-card"
         val="CARTAO"
         label="Cartão de crédito"
+        dense
       />
     </div>
 
