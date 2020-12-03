@@ -32,9 +32,11 @@
           label="Gerar mesas em um intervalo"
           color="primary"
           @click="gerarNumerosModal = true"
+          v-if="ms.isAdm"
         />
         <q-btn icon="las la-sync" flat @click="loadAll" />
         <q-dialog
+          v-if="ms.isAdm"
           v-model="gerarNumerosModal"
           persistent
           transition-show="jump-down"
@@ -79,11 +81,11 @@
       </div>
 
       <div class="row items-center q-gutter-x-md q-gutter-y-md q-pa-md">
-        <div @click="addNovaMesa" class="add-new-card" v-if="!mesa">
+        <div @click="addNovaMesa" class="add-new-card" v-if="ms.isAdm && !mesa">
           <q-icon name="las la-plus" size="50px" color="grey-8" />
         </div>
         <mesa-card
-          v-else
+          v-else-if="ms.isAdm"
           :mesa="mesa"
           @onSave="onNewSave"
           ref="novaMesaRef"
@@ -110,17 +112,22 @@ import AppHeader from "../../components/AppHeader.vue";
 import { NivelAcessoEnum, Usuario } from "../../core/model/Usuario";
 import UsuarioService from "../../core/services/UsuarioService";
 import MesaService from "../../core/services/MesaService";
+import MemoryService from "../../core/services/MemoryService";
 import MesaCard from "./MesaCard.vue";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
 import { Mesa } from "../../core/model/Mesa";
 import { Notify } from "quasar";
+import { Observer } from "mobx-vue";
 
+@Observer
 @Component({
   components: { AppHeader, MesaCard },
 })
 export default class Mesas extends Vue {
   gerarNumerosModal = false;
   disponivel = null
+
+  ms = MemoryService
 
   rangeGerador = {
     min: 0,

@@ -23,6 +23,7 @@
           ></q-btn>
         </div>
         <q-btn
+          v-if="ms.isAdm"
           round
           flat
           color="primary"
@@ -46,7 +47,7 @@
         >
           <q-tab name="todos" label="Todos" />
           <q-tab icon="las la-pizza-slice" name="COMIDA" label="Comidas" />
-          <q-tab icon="las la-glass-cheers" name="BEBIDA"  label="Bebidas" />
+          <q-tab icon="las la-glass-cheers" name="BEBIDA" label="Bebidas" />
         </q-tabs>
       </div>
 
@@ -90,7 +91,10 @@ import ProdutoCard from "./ProdutoCard.vue";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
 import ProdutoService from "../../core/services/ProdutoService";
 import { CategoriaEnum, Produto } from "../../core/model/Produto";
+import { Observer } from "mobx-vue";
+import MemoryService from "../../core/services/MemoryService";
 
+@Observer
 @Component({
   components: { AppHeader, ProdutoDialog, ProdutoCard },
 })
@@ -98,7 +102,9 @@ export default class Usuarios extends Vue {
   q = "";
   page = 1;
   tab = "todos";
-  categoria: CategoriaEnum
+  categoria: CategoriaEnum;
+
+  ms = MemoryService;
 
   produtos: Produto[] = [];
 
@@ -113,7 +119,7 @@ export default class Usuarios extends Vue {
       rpp: 10,
       page: this.page,
       q: this.q,
-      categoria: this.categoria
+      categoria: this.categoria,
     });
     this.produtos = list;
   }
@@ -140,12 +146,12 @@ export default class Usuarios extends Vue {
 
   @Watch("tab")
   onChangeTab(tab) {
-    this.categoria = tab
-    if(tab === "todos") {
-        this.categoria = null
+    this.categoria = tab;
+    if (tab === "todos") {
+      this.categoria = null;
     }
 
-    this.load()
+    this.load();
   }
 }
 </script>

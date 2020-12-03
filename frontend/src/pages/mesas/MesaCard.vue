@@ -12,9 +12,10 @@
         size="10pt"
         flat
         :disable="loading"
-        v-if="mesa.id"
+        v-if="mesa.id && ms.isAdm"
       />
       <q-btn
+        v-if="ms.isAdm"
         @click="modoEdicao = !modoEdicao"
         round
         flat
@@ -71,16 +72,21 @@
 </template>
 
 <script lang="ts">
+import { Observer } from "mobx-vue";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { Mesa } from "../../core/model/Mesa";
 import MesaService from "../../core/services/MesaService";
 import { confirmExclusao } from "../../core/utils/AlertUtils";
+import MemoryService from "../../core/services/MemoryService";
 
+@Observer
 @Component({
   components: {},
 })
 export default class MesaCard extends Vue {
   modoEdicao: boolean = false;
+
+  ms = MemoryService
 
   loading = false;
 

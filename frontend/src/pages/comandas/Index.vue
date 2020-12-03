@@ -25,6 +25,7 @@
           flat
           color="primary"
           icon="las la-plus"
+          v-if="!ms.isCozinheiro"
           size="18px"
           @click="cadastrarNovo()"
         />
@@ -84,8 +85,11 @@ import CadastroUsuarioDialog from "./CadastroUsuarioDialog.vue";
 import { confirmExclusao, showConfirm } from "../../core/utils/AlertUtils";
 import ComandaCard from "./ComandaCard.vue";
 import ComandaService from "../../core/services/ComandaService";
+import MemoryService from "../../core/services/MemoryService";
 import NotificarDialog from './NotificarDialog.vue'
+import { Observer } from "mobx-vue";
 
+@Observer
 @Component({
   components: { AppHeader, NotificarDialog, ComandaCard },
 })
@@ -94,6 +98,8 @@ export default class Comandas extends Vue {
   page = 1;
 
   tab = "todos"
+
+  ms = MemoryService
 
   comandas: Usuario[] = [];
 

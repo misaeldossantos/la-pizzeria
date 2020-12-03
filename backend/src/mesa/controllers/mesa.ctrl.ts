@@ -17,7 +17,7 @@ import { Comanda } from "../../comanda/model/comanda.entity";
 import { Query } from "typeorm/driver/Query";
 import { StatusComandaEnum } from "../../comanda/model/status-comanda-enum";
 
-@CustomAuth({ niveisAcesso: [NivelAcessoEnum.ADMINISTRADOR] })
+@CustomAuth({ niveisAcesso: [] })
 @Controller("/mesas")
 export class MesaCtrl {
   @Post()

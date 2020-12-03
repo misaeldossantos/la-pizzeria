@@ -48,7 +48,7 @@
             @click="notificar"
             round
             color="orange"
-            v-if="comandaAberta"
+            v-if="comandaAberta && ms.isCozinheiro"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -63,7 +63,7 @@
             round
             color="positive"
             @click="pagar"
-            v-if="comanda.status !== 'PAGO'"
+            v-if="(comanda.status !== 'PAGO') && ms.isAdm"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -78,7 +78,7 @@
             round
             color="blue"
             @click="editar"
-            v-if="comandaAberta"
+            v-if="comandaAberta && !ms.isCozinheiro"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -93,7 +93,7 @@
             round
             color="negative"
             @click="excluir"
-            v-if="comandaAberta"
+            v-if="comandaAberta && !ms.isCozinheiro"
           >
             <q-tooltip
               content-class="bg-grey-8"
@@ -110,16 +110,21 @@
 </template>
 
 <script lang="ts">
+import { Observer } from "mobx-vue";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import StatusComandaIndicator from "../../components/StatusComandaIndicator.vue";
 import { Comanda } from "../../core/model/Comanda";
+import MemoryService from '../../core/services/MemoryService'
 
+@Observer
 @Component({
   components: { StatusComandaIndicator },
 })
 export default class ComandaCard extends Vue {
   @Prop({ required: true })
   comanda: Comanda;
+
+  ms = MemoryService
 
   abrirModal() {
     (this.$refs.cadastroDialogRef as any).show();

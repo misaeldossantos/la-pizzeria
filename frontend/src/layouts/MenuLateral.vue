@@ -50,6 +50,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { NivelAcessoEnum, Usuario } from "../core/model/Usuario";
 import AuthService from "../core/services/AuthService";
+import MemoryService from "../core/services/MemoryService";
 import { showConfirm } from "../core/utils/AlertUtils";
 import MenuItens from "./MenuItens.vue";
 
@@ -94,8 +95,8 @@ export default class MenuLateral extends Vue {
   }
 
   async getPerfil() {
-    this.perfil = await AuthService.getPerfil();
-
+    await MemoryService.loadUsuario();
+    this.perfil = MemoryService.usuario
     const { nivelAcesso } = this.perfil;
 
     switch (nivelAcesso) {

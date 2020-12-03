@@ -26,6 +26,7 @@
         v-model="comanda.garcom"
         @filter="garcomAutoComplete.filter"
         emit-value
+        v-if="!ms.isGarcom"
       />
       <q-checkbox
         dense
@@ -43,17 +44,23 @@
 </template>
 
 <script lang="ts">
+import { Observer } from "mobx-vue";
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Comanda } from "../../core/model/Comanda";
 import { NivelAcessoEnum } from "../../core/model/Usuario";
 import MesaService from "../../core/services/MesaService";
 import UsuarioService from "../../core/services/UsuarioService";
+import MemoryService from "../../core/services/MemoryService";
 import AutoComplete from "../../core/utils/AutoComplete";
 
+@Observer
 @Component({
   components: {},
 })
 export default class DadosIniciaisCard extends Vue {
+
+  ms = MemoryService
+
   garcomAutoComplete = new AutoComplete({
     loadCallback: (q) => UsuarioService.list({ q, nivelAcesso: NivelAcessoEnum.GARCOM } as any),
   });

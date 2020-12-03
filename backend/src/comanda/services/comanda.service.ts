@@ -43,7 +43,7 @@ export class ComandaService {
       await comanda.garcom,
       itens.map(
         (item) =>
-          `Item <b>${item.produto.descricao}</b> pronto para entrega na mesa ${comanda.mesa.numero}`
+          `Item <b>${item.produto.descricao}</b> pronto para entrega na <b>mesa ${comanda.mesa.numero}</b>.`
       )
     );
   }

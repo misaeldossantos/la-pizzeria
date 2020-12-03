@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="row items-center q-gutter-x-md">
+      <div class="row items-center q-gutter-x-md" v-if="ms.isAdm">
         <q-btn round icon="las la-edit" color="positive" @click="editar" />
         <q-btn
           round
@@ -38,15 +38,20 @@
 </template>
 
 <script lang="ts">
+import { Observer } from "mobx-vue";
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { Produto } from "../../core/model/Produto";
+import MemoryService from "../../core/services/MemoryService";
 
+@Observer
 @Component({
   components: {},
 })
 export default class ProdutoCard extends Vue {
   @Prop({ required: true })
   produto: Produto;
+
+  ms = MemoryService
 
   @Prop()
   innerClass: string;

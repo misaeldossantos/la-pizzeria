@@ -35,7 +35,7 @@ export default class MenuItens extends Vue {
   itens: { description: string, icon: string, href: string }[];
 
   navigate(href: string) {
-    this.$router.push(href)
+    this.$router.replace(href)
   }
 
 }

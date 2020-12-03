@@ -1,6 +1,6 @@
 <template>
   <q-page class="row">
-    <span>Bem vindo(a) {{usuario.nome}}</span>
+    <span>Bem vindo(a)</span>
   </q-page>
 </template>
 

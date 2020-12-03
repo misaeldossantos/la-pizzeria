@@ -29,13 +29,19 @@ import AreaItens from "./AreaItens.vue";
 import DadosIniciaisCard from "./DadosIniciaisCard.vue";
 import ResumoCard from "./ResumoCard.vue";
 import { merge } from "lodash";
+import { Observer } from "mobx-vue";
+import MemoryService from "../../core/services/MemoryService";
+import { toJS } from "mobx";
 
+@Observer
 @Component({
   components: { AppHeader, DadosIniciaisCard, ResumoCard, AreaItens },
 })
 export default class ComandaPage extends Vue {
   comanda: Partial<Comanda> = new Comanda();
   itens = [];
+
+  ms = MemoryService
 
   async salvar() {
     try {
@@ -81,6 +87,10 @@ export default class ComandaPage extends Vue {
 
     if (mesa) {
       this.carregarMesaReserva(mesa)
+    }
+
+    if(this.ms.isGarcom) {
+      this.comanda.garcom = toJS(this.ms.usuario)
     }
   }
 
