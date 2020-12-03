@@ -24,7 +24,7 @@ export class ComandaItem extends Bean {
      quantidade: number;
 
      @Property()
-     @OneToMany(() => ItemObservacao, observacao => observacao.item, {lazy: true, cascade: true})
+     @OneToMany(() => ItemObservacao, observacao => observacao.item, {lazy: true, cascade: true, onDelete: 'CASCADE'})
      observacoes: ItemObservacao[];
      
      @Property()

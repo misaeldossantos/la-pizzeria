@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <observacoes-item-dialog ref="observacoesItemDialog" :item="item"/>
+    <observacoes-item-dialog ref="observacoesItemDialog" :item="item" @save="salvarObservacoes" />
   </q-card>
 </template>
 
@@ -27,6 +27,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import ProdutoGeneralCard from "../../components/produtos/ProdutoGeneralCard.vue";
 import { Produto } from "../../core/model/Produto";
+import ComandaService from "../../core/services/ComandaService";
 import ObservacoesItemDialog from "./ObservacoesItemDialog.vue";
 
 @Component({
@@ -64,7 +65,11 @@ export default class ProdutoComanda extends Vue {
   }
 
   async abrirObservacoesItem() {
-    (this.$refs.observacoesItemDialog as any).show()
+    (this.$refs.observacoesItemDialog as any).show(this.item)
+  }
+
+  async salvarObservacoes(observacoes) {
+    await ComandaService.saveObservacoes(this.item.id, observacoes)
   }
 }
 </script>

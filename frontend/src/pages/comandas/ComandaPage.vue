@@ -96,7 +96,7 @@ export default class ComandaPage extends Vue {
 
   async carregarMesaReserva(id) {
     const mesa = await MesaService.get(id);
-    this.comanda.mesa = mesa;
+    this.$set(this.comanda, "mesa", mesa)
   }
 }
 </script>

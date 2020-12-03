@@ -38,5 +38,13 @@ export default {
   },
   async notificarEntrega(id, ids) {
     await httpRequest.post(`/api/comandas/${id}/itens/entrega`, {ids})
-  }
+  },
+  async saveObservacoes(idItem, observacoes) {
+    const {data} = await httpRequest.post(`/api/comandas/itens/${idItem}/observacoes`, observacoes)
+    return data
+  },
+  async getObservacoes(idItem) {
+    const {data} = await httpRequest.get(`/api/comandas/itens/${idItem}/observacoes`)
+    return data
+  },
 }

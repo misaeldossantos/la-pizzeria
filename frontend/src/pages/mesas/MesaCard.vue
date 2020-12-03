@@ -3,7 +3,10 @@
     class="add-card column"
     :class="{ disponivel: mesa.disponivel, indisponivel: !mesa.disponivel }"
   >
-    <q-card-section class="row q-gutter-x-sm items-center" :class="{'justify-end': !mesa.id, 'justify-between': mesa.id}">
+    <q-card-section
+      class="row q-gutter-x-sm items-center"
+      :class="{ 'justify-end': !mesa.id, 'justify-between': mesa.id }"
+    >
       <q-btn
         @click="remover()"
         round
@@ -58,13 +61,23 @@
     </q-card-actions>
 
     <q-card-actions align="center" v-else-if="mesa.disponivel">
-      <q-item :disable="loading" clickable @click="$router.push(`/comandas/novo?mesa=${mesa.id}`)" class="bottom-button">
+      <q-item
+        :disable="loading"
+        clickable
+        @click="$router.push(`/comandas/novo?mesa=${mesa.id}`)"
+        class="bottom-button"
+      >
         <q-item-section> Reservar mesa </q-item-section>
       </q-item>
     </q-card-actions>
 
     <q-card-actions align="center" v-else-if="!mesa.disponivel">
-      <q-item :disable="loading" clickable class="bottom-button">
+      <q-item
+        :disable="loading"
+        clickable
+        class="bottom-button"
+        @click="verReserva"
+      >
         <q-item-section> Ver reserva </q-item-section>
       </q-item>
     </q-card-actions>
@@ -86,7 +99,7 @@ import MemoryService from "../../core/services/MemoryService";
 export default class MesaCard extends Vue {
   modoEdicao: boolean = false;
 
-  ms = MemoryService
+  ms = MemoryService;
 
   loading = false;
 
@@ -105,7 +118,7 @@ export default class MesaCard extends Vue {
 
   @Watch("modoEdicao")
   onModoEdicaoChange(value) {
-    this.$emit("modoEdicaoChange", value)
+    this.$emit("modoEdicaoChange", value);
   }
 
   async salvar() {
@@ -146,6 +159,17 @@ export default class MesaCard extends Vue {
   mounted() {
     if (this.openAsModoEdicao) {
       this.modoEdicao = true;
+    }
+  }
+
+  async verReserva() {
+    try {
+      this.$q.loading.show();
+      const comanda = await MesaService.getComandaByMesa(this.mesa.numero);
+      this.$router.push("/comandas/" + comanda.id)
+    } catch (e) {}
+    finally {
+      this.$q.loading.hide();
     }
   }
 }

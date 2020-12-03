@@ -5,12 +5,11 @@ import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { Bean } from '../../core/model/bean.entity';
 import { Produto } from './../../produtos/model/produto.entity';
 import { Comanda } from './comanda.entity';
-
 @Entity("comandas_itens_observacoes")
 export class ItemObservacao extends Bean {
 
      @Property()
-     @ManyToOne(() => Comanda)
+     @ManyToOne(() => ComandaItem, {onDelete: "CASCADE"})
      @JoinColumn({name: 'comanda_item_id'})
      item: ComandaItem;
 

@@ -18,6 +18,7 @@ import { Like } from "typeorm";
 import { PaginatedList } from "../../core/model/paginated-list";
 import { Mesa } from "../../mesa/model/mesa.entity";
 import { ComandaService } from "../services/comanda.service";
+import { ItemObservacao } from "../model/item-observacao.entity";
 
 @Controller("/comandas")
 export class ComandaCtrl {
@@ -131,7 +132,6 @@ export class ComandaCtrl {
     @PathParams("id") idComanda: number,
     @BodyParams() item: ComandaItem
   ) {
-    // TODO: atualizar valor total da comanda
     item.comanda = {
       id: idComanda,
     } as Comanda;
@@ -140,6 +140,21 @@ export class ComandaCtrl {
     await this.comandaService.atualizaValorTotal(idComanda);
 
     return itemSalvo;
+  }
+
+  @Post("/itens/:idItem/observacoes")
+  async saveObservacoes(
+    @PathParams("idItem") idItem: number,
+    @BodyParams() observacoes: ItemObservacao[]
+  ) {
+    const item = await ComandaItem.findOneOrFail(idItem)
+    item.observacoes = observacoes
+    item.save()
+  }
+
+  @Get("/itens/:idItem/observacoes")
+  async getObservacoes(@PathParams("idItem") idItem: number) {
+    return await ItemObservacao.find({ where: {item: {id: idItem}}, relations: ['ingrediente'] });
   }
 
   @Delete("/:idComanda/itens/:id")
